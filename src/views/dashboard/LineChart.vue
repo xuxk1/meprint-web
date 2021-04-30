@@ -36,7 +36,7 @@ export default {
     chartData: {
       type: Object,
       required: true
-    },
+    }
   },
   data() {
     return {
@@ -49,7 +49,7 @@ export default {
     chartData: {
       deep: true,
       handler(val) {
-        console.log("val1=============" + val)
+        console.log('val1=============' + val)
       }
     }
   },

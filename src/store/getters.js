@@ -20,6 +20,54 @@ const getters = {
   qiNiuUploadApi: state => state.api.qiNiuUploadApi,
   sqlApi: state => state.api.sqlApi,
   swaggerApi: state => state.api.swaggerApi,
-  sidebarRouters: state => state.permission.sidebarRouters
+  sidebarRouters: state => state.permission.sidebarRouters,
+  count: state => state.count,
+  working(state){
+    return {
+      saving: state.working.saving,
+      draging: state.working.draging,
+      editing: state.working.editing
+    }
+  },
+  config(state) {
+    return {
+      ctrlPanelMin: state => state.config.ctrlPanelMin,
+      ctrlPanelWidth: state => state.config.ctrlPanelWidth,
+      dividerWidth: state => state.config.dividerWidth,
+      defaultLang: state => state.config.defaultLang,
+      zoom: state => state.config.zoom
+    }
+  },
+  getMinder: state => state.minder,
+  getEditor: state => state.editor
 }
+// export const count = state => {
+//   return state.count;
+// }
+
+// export const working = state => {
+//   return {
+//     saving: state.working.saving,
+//     draging: state.working.draging,
+//     editing: state.working.editing
+//   }
+// }
+//
+// export const config = state => {
+//   return {
+//     ctrlPanelMin: state.config.ctrlPanelMin,
+//     ctrlPanelWidth: state.config.ctrlPanelWidth,
+//     dividerWidth: state.config.dividerWidth,
+//     defaultLang: state.config.defaultLang,
+//     zoom: state.config.zoom
+//   }
+// }
+//
+// export const getMinder = state => {
+//   return state.minder
+// }
+//
+// export const getEditor = state => {
+//   return state.editor
+// }
 export default getters

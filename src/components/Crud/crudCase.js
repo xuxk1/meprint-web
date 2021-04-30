@@ -357,7 +357,6 @@ function CRUD(options) {
     },
     // 当前页改变
     pageChangeHandler(e) {
-      console.log('e=======' + e)
       crud.page.page = e
       crud.refresh()
     },

@@ -45,13 +45,12 @@
             </el-form-item>
             <el-form-item label="用例集分类" prop="projectId">
               <treeselect
-                v-model.number="form.projectId"
+                v-model="form.projectId"
                 :options="projects"
                 :load-options="loadProjects"
                 style="width: 178px"
                 placeholder="选择用例集"
                 @remove-tag="deleteTag"
-                :multiple="true"
               />
             </el-form-item>
             <el-form-item label="关联需求" prop="requirementId">
@@ -87,18 +86,22 @@
               </el-select>
             </el-form-item>
             <el-form-item label="描述" prop="description">
-              <textarea class="text-area"  maxLength="1024" v-model="form.description"></textarea>
+              <textarea v-model="form.description" class="text-area"  maxLength="1024" ></textarea>
             </el-form-item>
-            <el-form-item v-if="crud.status.add" label="上传" prop="caseContent">
+            <el-form-item v-if="crud.status.add" label="上传">
+              <el-input v-model="form.file" v-if="false"></el-input>
               <el-upload
                 ref="upload"
                 :limit="1"
+                accept=".xmind"
+                name="file"
                 :before-upload="beforeUpload"
-                :auto-upload="false"
                 :headers="headers"
                 :on-success="handleSuccess"
                 :on-error="handleError"
-                :action="fileUploadApi + '?name=' + form.name"
+                :on-change="beforeUpload"
+                :action="xmindUploadApi"
+                :auto-upload="false"
               >
                 <div class="eladmin-upload"><i class="el-icon-upload" /> 添加文件</div>
                 <div slot="tip" class="el-upload__tip">可上传xmind的文件，且不超过100M</div>
@@ -115,15 +118,19 @@
           <el-table-column :selectable="checkboxT" type="selection" width="55" />
           <el-table-column :show-overflow-tooltip="true" prop="id" label="序号" />
           <el-table-column :show-overflow-tooltip="true" prop="groupId" label="用例集ID" />
-          <el-table-column :show-overflow-tooltip="true" prop="title" label="用例集名称" />
-          <el-table-column v-model="form.projectId" :show-overflow-tooltip="true" prop="projectId" label="项目ID">
+          <el-table-column :show-overflow-tooltip="true" prop="title" label="用例集名称" >
+            <template slot-scope="scope">
+              <el-link @click="getCaseInfo(scope.row.id)"><font color="#1890ff">{{scope.row.title}}</font></el-link>
+            </template>
+          </el-table-column>
+          <el-table-column v-model="form.project.id" :load-options="loadProjects" :show-overflow-tooltip="true" prop="projectId" label="项目ID">
             <template slot-scope="scope">
               <div>{{ scope.row.projectId}}</div>
             </template>
           </el-table-column>
           <el-table-column :show-overflow-tooltip="true" prop="creator" label="创建人" />
           <el-table-column :show-overflow-tooltip="true" prop="modifier" label="更新人" />
-          <el-table-column :show-overflow-tooltip="true" prop="gmtCreated" width="135" label="创建日期" />
+          <el-table-column :show-overflow-tooltip="true" prop="gmtCreated" label="创建日期" />
           <el-table-column
             v-if="checkPer(['admin','case:edit','case:del'])"
             label="操作"
@@ -164,23 +171,24 @@ import Treeselect from '@riophae/vue-treeselect'
 import { mapGetters } from 'vuex'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
-import Cookies from 'js-cookie'
+import Xmind from './xmind.vue'
 let userRoles = []
 let userProducts = []
+const initData = `{"root":{"data":{"id":"bv8nxhi3c800","created":1562059643204,"text":"中心主题"},"children":[]},"template":"default","theme":"fresh-blue","version":"1.4.43","base":0}`;
 const username = localStorage.getItem('username')
-var defaultForm = { id: null, creator: username, title: null, productLineId: 1, caseType: null, channel: 1, caseContent: {"root":{"data":{"created":"1618280535870","id":"7n94pmcfvl7l5lttdpgukdjh1u","text":"UI自动化测试点梳理","priority":0}}}, bizId: -1, projectId: null, enabled: 'false', project: { id: null }, description: null, requirementId: null}
+var defaultForm = { id: null, creator: username, title: null, productLineId: 1, caseType: null, channel: 1, file: '', caseContent:initData,  bizId: -1, projectId: null, enabled: 'false', project: { id: null }, description: null, requirementId: 1}
 export default {
   name: 'Case',
   components: { Treeselect, crudOperation, rrOperation, udOperation, pagination, DateRangePicker },
   cruds() {
     const params = {
-      creator: username,
       productLineId: 1,
       channel: 1,
       bizId: -1
     }
     return CRUD({ title: '用例管理', url: 'api/case/list', params, crudMethod: { ...cases }})
   },
+
   mixins: [presenter(), header(), form(defaultForm), crud()],
   // 数据字典
   dicts: ['case_status'],
@@ -215,8 +223,7 @@ export default {
   computed: {
     ...mapGetters([
       'user',
-      'baseApi',
-      'fileUploadApi'
+      'baseApi'
     ])
   },
   watch: {
@@ -249,7 +256,7 @@ export default {
     },
     changeProjectId(value) {
       console.log('bizId~~~~~~~' + value)
-      this.projectId = value
+      this.projectId = Number(value)
     },
     changeCaseType(value) {
       this.caseType = value
@@ -265,6 +272,8 @@ export default {
     [CRUD.HOOK.afterToCU](crud, form) {
       if (form.id == null) {
         this.getProjects()
+      } else if (form.projectId != null) {
+        this.getSupProjects(form.projectId)
       } else {
         this.getSupProjects(form.project.id)
       }
@@ -279,7 +288,7 @@ export default {
         })
         return false
       }
-      if (!crud.form.caseType){
+      if (!crud.form.caseType) {
         this.$message({
           message: '用例类型选项不能为空',
           type: 'warning'
@@ -346,7 +355,6 @@ export default {
             if (obj.hasChildren) {
               obj.children = null
             }
-            console.log('obj====' + obj)
             return obj
           })
           setTimeout(() => {
@@ -372,13 +380,15 @@ export default {
       this.$refs.upload.submit()
     },
     beforeUpload(file) {
+      let reader = new FileReader()
+      reader.readAsDataURL(file.raw);
       let isLt2M = true
       isLt2M = file.size / 1024 / 1024 < 100
       if (!isLt2M) {
         this.loading = false
         this.$message.error('上传文件大小不能超过 100MB!')
       }
-      this.form.name = file.name
+      this.form.file = file.raw
       return isLt2M
     },
     handleSuccess(response, file, fileList) {
@@ -397,6 +407,12 @@ export default {
         duration: 2500
       })
       this.loading = false
+    },
+    getCaseInfo(id) {
+      cases.getCaseInfo(id).then(res => {
+        console.log('res=====' + id)
+      })
+      this.$router.push({path: '/system/case/xmind', query: { caseId: id }})
     }
   }
 }

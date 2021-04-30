@@ -30,10 +30,17 @@ import router from './router/routers'
 import './assets/icons' // icon
 import './router/index' // permission control
 import 'echarts-gl'
+import kity from 'kity'
+import kityminder from 'kityminder-core'
+import 'vue-kityminder-editor/lib/kityMinder.css'
+import kityMinder from 'vue-kityminder-editor'
 
 import axios from 'axios'
 Vue.prototype.$axios = axios
 
+Vue.use(kity)
+Vue.use(kityMinder)
+Vue.use(kityminder)
 Vue.use(checkPer)
 Vue.use(VueHighlightJS)
 Vue.use(mavonEditor)

@@ -20,8 +20,6 @@ const api = {
     sqlApi: baseUrl + '/druid/index.html',
     // swagger
     swaggerApi: baseUrl + '/swagger-ui.html',
-    // 文件上传
-    fileUploadApi: baseUrl + '/api/localStorage',
     // baseUrl，
     baseApi: baseUrl
   }
