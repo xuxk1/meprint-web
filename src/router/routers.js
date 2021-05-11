@@ -21,6 +21,23 @@ export const constantRouterMap = [
     hidden: true
   },
   {
+    path: '/system/case/xmind',
+    component: (resolve) => require(['@/views/components/XmindEditor'], resolve),
+    // component: Layout,
+    hidden: true,
+    // redirect: '/system/case/xmind',
+    name: 'XmindEditor',
+    meta: { title: '脑图', noCache: true }
+    // children: [
+    //   {
+    //     path: '/system/case/xmind',
+    //     component: (resolve) => require(['@/views/components/XmindEditor'], resolve),
+    //     name: 'Xmind',
+    //     meta: { title: '脑图', affix: true, noCache: true }
+    //   }
+    // ]
+  },
+  {
     path: '/redirect',
     component: Layout,
     hidden: true,

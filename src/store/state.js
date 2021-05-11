@@ -1,3 +1,5 @@
+import getters from './getters'
+
 export const state = {
   count: 2,
   minder: {},
@@ -8,6 +10,14 @@ export const state = {
     draging: false
   },
   callbackQueue: [],
+  imageObj: {
+    imageUrl: '',
+    imageTitle: ''
+  },
+  switchShow: {},
+
+  usedResource :[],
+
   config: {
     // 右侧面板最小宽度
     ctrlPanelMin: 250,

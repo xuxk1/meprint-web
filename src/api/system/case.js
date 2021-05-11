@@ -52,11 +52,15 @@ export function edit(data) {
   })
 }
 
-export function update(data) {
+export function Xmindupdate(data) {
   return request({
     url: 'api/case/update',
     method: 'post',
-    data
+    headers: {
+    'Authorization': getToken(),
+    'Content-Type' : 'application/json'
+    },
+    data: data
   })
 }
 
@@ -110,4 +114,4 @@ export function countByCondition(data) {
   })
 }
 
-export default { add, edit, update, del, queryList, queryDetail, listCreators, getCaseInfo, countByCondition}
+export default { add, edit, del, Xmindupdate, queryList, queryDetail, listCreators, getCaseInfo, countByCondition}

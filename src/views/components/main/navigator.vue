@@ -29,22 +29,22 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex"
+import { mapGetters, mapActions, mapMutations } from 'vuex'
 import $ from 'jquery'
 export default {
-  name: "Navigator",
+  name: 'Navigator',
   data() {
     return {
       zoom: 100,
       isNavOpen: true,
-      $previewNavigator: "",
-      paper: "",
-      nodeThumb: "",
-      connectionThumb: "",
-      visibleRect: "",
-      contentView: "",
-      visibleView: "",
-      pathHandler: "",
+      $previewNavigator: '',
+      paper: '',
+      nodeThumb: '',
+      connectionThumb: '',
+      visibleRect: '',
+      contentView: '',
+      visibleView: '',
+      pathHandler: '',
     };
   },
   computed: {
@@ -76,7 +76,6 @@ export default {
 
     zoomIn() {
       this.minder.execCommand('zoomIn');
-      console.log('放大放大')
     },
 
     RestoreSize() {
@@ -113,7 +112,7 @@ export default {
 
     toggleNavOpen() {
       let self = this;
-      let isNavOpen = "";
+      let isNavOpen = '';
       isNavOpen = !JSON.parse(self.getNavOpenState());
       self.setMemory({
         key: 'navigator-hidden',
@@ -147,7 +146,7 @@ export default {
         case 'tianpan-compact':
           return function (nodePathData, x, y, width, height) {
             let r = width >> 1;
-            nodePathData.push("M", x, y + r, "a", r, r, 0, 1, 1, 0, 0.01, "z");
+            nodePathData.push('M', x, y + r, 'a', r, r, 0, 1, 1, 0, 0.01, 'z');
           };
         default: {
           return function (nodePathData, x, y, width, height) {

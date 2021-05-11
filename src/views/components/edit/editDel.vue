@@ -12,13 +12,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import {
+  mapGetters
+} from 'vuex';
 export default {
-  name: 'EditDel',
+  name: 'edit_del',
   computed: {
     ...mapGetters({
-      minder: 'getMinder',
-      editor: 'getEditor'
+      'minder': 'getMinder',
+      'editor': 'getEditor'
     }),
     disabled1() {
       return this.minder.queryCommandState && this.minder.queryCommandState('text') === -1;

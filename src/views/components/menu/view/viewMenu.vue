@@ -1,11 +1,11 @@
 <template lang="">
-  <div class="menu-container">
-    <mold/>
-    <theme/>
-    <arrange/>
-    <styleOperation/>
-    <fontOperation/>
-  </div>
+<div class="menu-container">
+  <mold/>
+  <theme/>
+  <arrange/>
+  <styleOperation/>
+  <fontOperation/>
+</div>
 
 </template>
 

@@ -39,6 +39,25 @@ export const actions = {
     commit
   }) => commit('registerEvent', callback),
 
+  setImageUrl({ commit }) {
+    commit('setImageUrl', imageUrl)
+  },
+
+  setImageTitle({ commit }) {
+    commit('setImageTitle', imageTile)
+  },
+
+  setUsedResource({ commit }) {
+    commit('setUsedResource', usedResObj)
+  },
+
+  setSwitchShow(commit) {
+    commit('setSwitchShow', swithcShowObj)
+  },
+
+  setTheme(commit) {
+    commit('setTheme', theme)
+  },
   executeCallback({
     commit,
     state

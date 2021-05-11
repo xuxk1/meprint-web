@@ -125,7 +125,7 @@ export default {
 
     computed: {
         ...mapGetters({
-            minder: "getMinder"
+            minder: 'getMinder'
         }),
         currentTheme() {
             return this.minder.getThemeItems()
@@ -135,7 +135,7 @@ export default {
         disabledFont() {
             var currentFontFamily =
                 this.minder.queryCommandValue &&
-                this.minder.queryCommandValue("fontfamily")
+                this.minder.queryCommandValue('fontfamily')
             this.fontFamilyDefaultValue = currentFontFamily || "字体";
             return (
                 this.minder.queryCommandState &&

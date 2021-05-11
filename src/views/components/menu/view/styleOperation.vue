@@ -22,7 +22,7 @@ import {
     mapGetters
 } from "vuex";
 export default {
-    name: "StyleOpreation",
+    name: 'styleOpreation',
     computed: {
         ...mapGetters({
             minder: "getMinder",

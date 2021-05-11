@@ -14,12 +14,12 @@
 <script>
 import {
   mapGetters
-} from 'Vuex'
+} from 'vuex'
 export default {
-  name: 'MoveBox',
+  name: 'moveBox',
   computed: {
     ...mapGetters({
-      minder: 'getMinder'
+      'minder': 'getMinder'
     }),
     disabled1() {
       var bool = false;

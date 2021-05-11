@@ -4,7 +4,6 @@ const install = function(Vue) {
   Vue.mixin({
     data() {
       if (this.$options.dicts instanceof Array) {
-        console.log('this.$options.dicts=====' +  this.$options.dicts)
         const dict = {
           dict: {},
           label: {}

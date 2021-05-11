@@ -25,7 +25,6 @@ export default {
   },
   data() {
     return {
-      // title: 'ELADMIN-后台管理',
       title: 'MePrint-质量管理平台',
       logo: Logo
     }

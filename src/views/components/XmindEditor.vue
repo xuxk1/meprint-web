@@ -1,37 +1,27 @@
 <template>
-<div class="main-container">
   <div>
     <header-menu></header-menu>
-  </div>
-  <div>
     <main-editor ref="child"></main-editor>
-  </div>
-  <footer style="width: 800px; height: 600px">
     <navigator></navigator>
-  </footer>
-
-</div>
-
+  </div>
 </template>
 
 <script>
-import headerMenu from '../components/Header'
-import mainEditor from '../components/main/mainEditor'
-import navigator from '../components/main/navigator'
-import footer from '../components/Footer'
+import headerMenu from '../../views/components/Header'
+import mainEditor from '../../views/components/main/mainEditor'
+import navigator from '../../views/components/main/navigator'
 
 export default {
   name: 'XmindEditor',
   components: {
     headerMenu,
     mainEditor,
-    navigator
+    navigator,
   },
   methods: {
     save() {
       this.$refs.child.savesave();
-    },
-  },
+    }
+  }
 }
-
 </script>

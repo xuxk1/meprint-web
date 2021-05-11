@@ -1,6 +1,6 @@
 <template lang="html">
 <div class="menu-container">
-
+ 
   <insert-box></insert-box>
   <move-box></move-box>
   <edit-del></edit-del>
@@ -10,7 +10,7 @@
   <custom-box></custom-box>
    <expand></expand>
   <selection></selection>
-  <div class='menu-button'>
+  <div class='menu-button'>  
     <el-button type="primary" @click="save" size="medium">保存</el-button>
   </div>
 </div>
@@ -41,9 +41,9 @@ export default {
 		attachment,
 	},
 	methods: {
-		save() {
-			this.$parent.save()
-		}
-	}
-}
+		save: function () {
+			this.$parent.save();
+		},
+	},
+};
 </script>

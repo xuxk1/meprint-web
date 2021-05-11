@@ -21,35 +21,41 @@
 </template>
 
 <script>
-import {
-    mapGetters
-} from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
-    name: 'Mold',
-    data() {
-        return {
-            mold_index: 1,
-        }
-    },
-    computed: {
-        ...mapGetters({
-            'minder': 'getMinder'
-        }),
-        class_mold_index() {
-            return 'mold-' + this.mold_index
-        },
-        disabled() {
-            return this.minder.queryCommandState && this.minder.queryCommandState('template') === -1
-        },
-        templateList() {
-            return kityminder.Minder.getTemplateList();
-        }
-    },
-    methods: {
-        handleCommand(command) {
-            this.mold_index = ~~command + 1;
-            this.minder.execCommand('template', Object.keys(this.templateList)[command]);
-        }
+  name: 'mold',
+  data() {
+    return {
+      mold_index: 1,
     }
-}
+  },
+  computed: {
+    ...mapGetters({
+      minder: 'getMinder'
+    }),
+    class_mold_index() {
+      return 'mold-' + this.mold_index
+    },
+    disabled() {
+      return (
+        this.minder.queryCommandState &&
+        this.minder.queryCommandState("template") === -1
+      );
+    },
+    templateList() {
+        console.log(kityminder.Minder.getThemeList())
+      return kityminder.Minder.getTemplateList();
+    
+    },
+  },
+  methods: {
+    handleCommand(command) {
+      this.mold_index = ~~command + 1;
+      this.minder.execCommand(
+        "template",
+        Object.keys(this.templateList)[command]
+      );
+    },
+  },
+};
 </script>
