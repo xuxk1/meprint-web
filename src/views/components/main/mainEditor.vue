@@ -55,14 +55,16 @@ export default {
     this.ws = (window.ws = new WebSocket(this.wsUrl))
     this.initWebsocket(this.ws)
   },
-  destroyed: function() {
+  destroyed () {
     //页面销毁时关闭长连接
-    window.onbeforeunload(() => {
-      this.ws.close()
+    window.addEventListener("beforeunload", e => {
+      this.onclose(e)
     })
-    this.onclose()
   },
-  mounted() {
+  mounted () {
+    window.addEventListener("beforeunload", e => {
+      this.onclose(e)
+    })
     this.executeCallback()
   },
   computed: {
@@ -160,8 +162,14 @@ export default {
     onclose(e) {
       console.log("连接关闭")
       console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean)
+      e = e || window.event;
+      if (e) {
+        e.returnValue = "您是否确认离开此页面-您输入的数据可能不会被保存";
+      }
+      this.ws.close()
+      return "您是否确认离开此页面-您输入的数据可能不会被保存";
       //重连
-      this.reconnect()
+      // this.reconnect()
     },
     onerror(e) {
       console.log("出现错误:" + e.error)
@@ -233,7 +241,7 @@ export default {
       if (data) {
         editor.minder.importJson(data)
       }
-      editor.minder.on('contentchange', function () {
+      editor.minder.on('contentchange', (e) => {
         editXmindData = JSON.stringify(editor.minder.exportJson())
         contentchange = JSON.parse(editXmindData)
         contentchange.base = 0
