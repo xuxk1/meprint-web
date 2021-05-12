@@ -231,27 +231,36 @@ export default {
     );
     self.contentView = new kity.Box();
     self.visibleView = new kity.Box();
+    try{
+      self.pathHandler = self.getPathHandler(minder.getTheme());
+      minder.setDefaultOptions({
+        zoom: self.config.zoom,
+      });
 
-    self.pathHandler = self.getPathHandler(minder.getTheme());
-    minder.setDefaultOptions({
-      zoom: self.config.zoom,
-    });
-
-    minder &&
+      minder &&
       minder.on("zoom", function (e) {
         self.zoom = e.zoom;
       });
-    if (self.isNavOpen) {
-      self.bind();
-      self.updateContentView();
-      self.updateVisibleView();
-    } else {
-      self.unbind();
+      if (self.isNavOpen) {
+        self.bind();
+        self.updateContentView();
+        self.updateVisibleView();
+      } else {
+        self.unbind();
+      }
+      // 主题切换事件
+      minder.on('themechange', function (e) {
+        pathHandler = self.getPathHandler(e.theme);
+      });
+    }catch (e) {
+      if(e instanceof SyntaxError){
+        console.log('handle this expected error')
+      }else if(e instanceof TypeError){
+        console.log('handle unexpected error')
+      }
+    }finally {
+      console.log('finally_statements')
     }
-    // 主题切换事件
-    minder.on('themechange', function (e) {
-      pathHandler = self.getPathHandler(e.theme);
-    });
 
     navigate();
 

@@ -180,7 +180,13 @@
               this.$refs.note.value = this.minder.queryCommandValue('note');
             }
           } catch (e) {
-            console.log(e);
+            if(e instanceof SyntaxError){
+              console.log('handle this expected error')
+            }else if(e instanceof TypeError){
+              console.log('handle unexpected error')
+            }
+          }finally {
+            console.log('finally_statements')
           }
         }
         return (
