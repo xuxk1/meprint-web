@@ -33,9 +33,7 @@
             <date-range-picker v-model="query.createTime" class="date-item" />
             <rrOperation />
           </div>
-          <crudOperation :permission="permission">
-            <!-- 新增 -->
-          </crudOperation>
+          <crudOperation show="" :permission="permission" />
         </div>
         <!--表单渲染-->
         <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="570px">

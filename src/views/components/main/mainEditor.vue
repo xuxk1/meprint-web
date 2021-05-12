@@ -17,7 +17,7 @@ export default {
       wsUrl: '',
       recordId: '',
       title: '',
-      ws: null,//建立的连接
+      ws: '',//建立的连接
       lockReconnect: false,//是否真正建立连接
       timeout: 60*1000,//58秒一次心跳
       timeoutObj: null,//心跳心跳倒计时
@@ -54,17 +54,14 @@ export default {
     this.wsUrl = 'ws://localhost:9013/api/case/' + this.caseId + '/undefined/0/' + username + '/' + getToken()
     this.ws = (window.ws = new WebSocket(this.wsUrl))
     this.initWebsocket(this.ws)
+    window.addEventListener('beforeunload', e => this.onclose(e))
+    this.$router.afterEach(() => this.ws.close())
   },
   destroyed () {
     //页面销毁时关闭长连接
-    window.addEventListener("beforeunload", e => {
-      this.onclose(e)
-    })
+    window.removeEventListener('beforeunload', e => this.onclose(e))
   },
   mounted () {
-    window.addEventListener("beforeunload", e => {
-      this.onclose(e)
-    })
     this.executeCallback()
   },
   computed: {
@@ -112,7 +109,7 @@ export default {
       self.timeoutObj = setTimeout(function(){
         //这里发送一个心跳，后端收到后，返回一个心跳消息，
         if (self.ws.readyState == 1) {//如果连接正常
-          self.ws.send(messageType + 'ping ping ping') //这里可以自己跟后端约定
+          self.onsend(messageType + 'ping ping ping') //这里可以自己跟后端约定
         }else{//否则重连
           self.reconnect()
         }
@@ -164,9 +161,9 @@ export default {
       console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean)
       e = e || window.event;
       if (e) {
-        e.returnValue = "您是否确认离开此页面-您输入的数据可能不会被保存";
+        e.returnValue = "您是否确认离开此页面-您输入的数据可能不会被保存"
+        this.ws.close()
       }
-      this.ws.close()
       return "您是否确认离开此页面-您输入的数据可能不会被保存";
       //重连
       // this.reconnect()
@@ -241,7 +238,7 @@ export default {
       if (data) {
         editor.minder.importJson(data)
       }
-      editor.minder.on('contentchange', (e) => {
+      editor.minder.on('contentchange', () => {
         editXmindData = JSON.stringify(editor.minder.exportJson())
         contentchange = JSON.parse(editXmindData)
         contentchange.base = 0
