@@ -27,7 +27,7 @@
 <script>
 import {
   mapGetters
-} from 'vuex';
+} from 'vuex'
 export default {
   name: 'Expand',
   computed: {
@@ -38,11 +38,11 @@ export default {
   },
   methods: {
     handleCommand(command) {
-      this.minder.execCommand && this.minder.execCommand('ExpandToLevel', command);
+      this.minder.execCommand && this.minder.execCommand('ExpandToLevel', command)
     },
 
     expandAll() {
-      this.minder.execCommand && minder.execCommand('ExpandToLevel', 9999);
+      this.minder.execCommand && minder.execCommand('ExpandToLevel', 9999)
     }
   }
 }

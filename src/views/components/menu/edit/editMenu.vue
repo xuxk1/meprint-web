@@ -17,15 +17,15 @@
 </template>
 
 <script>
-import insertBox from './insertBox';
-import moveBox from './moveBox';
-import editDel from './editDel';
-import customBox from './customBox';
-import sequenceBox from './sequenceBox';
-import progressBox from './progressBox';
-import expand from './expand';
-import selection from './selection';
-import attachment from './attachment';
+import insertBox from './insertBox'
+import moveBox from './moveBox'
+import editDel from './editDel'
+import customBox from './customBox'
+import sequenceBox from './sequenceBox'
+import progressBox from './progressBox'
+import expand from './expand'
+import selection from './selection'
+import attachment from './attachment'
 
 export default {
 	name: 'editMenu',
@@ -38,7 +38,7 @@ export default {
 		expand,
 		selection,
 		customBox,
-		attachment,
+		attachment
 	},
 	methods: {
 		save() {

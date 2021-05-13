@@ -98,7 +98,7 @@
                 :on-success="handleSuccess"
                 :on-error="handleError"
                 :on-change="beforeUpload"
-                :action="xmindUploadApi"
+                :action="baseApi"
                 :auto-upload="false"
               >
                 <div class="eladmin-upload"><i class="el-icon-upload" /> 添加文件</div>

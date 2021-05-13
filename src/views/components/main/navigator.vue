@@ -235,22 +235,22 @@ export default {
       self.pathHandler = self.getPathHandler(minder.getTheme());
       minder.setDefaultOptions({
         zoom: self.config.zoom,
-      });
+      })
 
       minder &&
-      minder.on("zoom", function (e) {
-        self.zoom = e.zoom;
-      });
+      minder.on('zoom', function (e) {
+        self.zoom = e.zoom
+      })
       if (self.isNavOpen) {
-        self.bind();
-        self.updateContentView();
-        self.updateVisibleView();
+        self.bind()
+        self.updateContentView()
+        self.updateVisibleView()
       } else {
-        self.unbind();
+        self.unbind()
       }
       // 主题切换事件
       minder.on('themechange', function (e) {
-        pathHandler = self.getPathHandler(e.theme);
+        pathHandler = self.getPathHandler(e.theme)
       });
     }catch (e) {
       if(e instanceof SyntaxError){
@@ -262,7 +262,7 @@ export default {
       console.log('finally_statements')
     }
 
-    navigate();
+    navigate()
 
     function navigate() {
       function moveView(center, duration) {

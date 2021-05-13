@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from 'vuex'
 export default {
 	name: 'progressBox',
 	data() {
@@ -33,49 +33,49 @@ export default {
 			minder: 'getMinder',
 		}),
 		commandDisabled() {
-			var minder = this.minder;
+			let minder = this.minder
 			minder.on &&
 				minder.on('interactchange', function () {
-					this.commandValue = minder.queryCommandValue('progress');
-				});
+					this.commandValue = minder.queryCommandValue('progress')
+				})
 			return (
 				minder.queryCommandState &&
 				minder.queryCommandState('progress') === -1
-			);
-		},
+			)
+		}
 	},
 	methods: {
 		execCommand(index) {
-			this.commandDisabled || this.minder.execCommand('progress', index);
+			this.commandDisabled || this.minder.execCommand('progress', index)
 		},
 		classArray(index) {
-			var isActive =
+			let isActive =
 				this.minder.queryCommandValue &&
-				this.minder.queryCommandValue('progress') == index;
-			var sequence = 'progress-' + index;
+				this.minder.queryCommandValue('progress') == index
+			let sequence = 'progress-' + index
 
 			// 用数组返回多个class
-			var arr = [
+			const arr = [
 				{
 					active: isActive,
 				},
 				sequence,
-			];
-			return arr;
+			]
+			return arr
 		},
 		title(index) {
 			switch (index) {
 				case 0:
-					return '移除进度';
+					return '移除进度'
 				case 1:
-					return '未开始';
+					return '未开始'
 				case 9:
-					return '全部完成';
+					return '全部完成'
 				default:
-					return '完成' + (index - 1) + '/8';
+					return '完成' + (index - 1) + '/8'
 			}
-		},
+		}
 	},
-	created() {},
-};
+	created() {}
+}
 </script>

@@ -118,14 +118,6 @@ export default {
   data() {
     return {
       projects: [],
-      rules: {
-        name: [
-          { required: true, message: '请输入名称', trigger: 'blur' }
-        ],
-        projectSort: [
-          { required: true, message: '请输入序号', trigger: 'blur', type: 'number' }
-        ]
-      },
       permission: {
         add: ['admin', 'project:add'],
         edit: ['admin', 'project:edit'],
@@ -134,7 +126,15 @@ export default {
       enabledTypeOptions: [
         { key: 'true', display_name: '正常' },
         { key: 'false', display_name: '禁用' }
-      ]
+      ],
+      rules: {
+        name: [
+          { required: true, message: '请输入名称', trigger: 'blur' }
+        ],
+        projectSort: [
+          { required: true, message: '请输入序号', trigger: 'blur', type: 'number' }
+        ]
+      }
     }
   },
   methods: {
@@ -242,13 +242,11 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  ::v-deep .el-input-number .el-input__inner {
+    text-align: left;
+  }
  ::v-deep .vue-treeselect__control,::v-deep .vue-treeselect__placeholder,::v-deep .vue-treeselect__single-value {
     height: 30px;
     line-height: 30px;
-  }
-</style>
-<style rel="stylesheet/scss" lang="scss" scoped>
- ::v-deep .el-input-number .el-input__inner {
-    text-align: left;
   }
 </style>
