@@ -30,7 +30,6 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from 'vuex'
-import $ from 'jquery'
 export default {
   name: 'Navigator',
   data() {
@@ -178,11 +177,21 @@ export default {
         view.width + padding * 2 + 1,
         view.height + padding * 2 + 1
       );
-      let nodePathData = [];
+      var nodePathData = [];
       let connectionThumbData = [];
       self.minder.getRoot().traverse(function (node) {
         let box = node.getLayoutBox();
-        self.pathHandler(nodePathData, box.x, box.y, box.width, box.height);
+        try{
+          self.pathHandler(nodePathData, box.x, box.y, box.width, box.height);
+        }catch (e) {
+          if(e instanceof SyntaxError){
+            console.log('handle this expected error')
+          }else if(e instanceof TypeError){
+            console.log('handle unexpected error')
+          }
+        }finally {
+          console.log('finally_statements')
+        }
         if (node.getConnection() && node.parent && node.parent.isExpanded()) {
           connectionThumbData.push(node.getConnection().getPathData());
         }
@@ -250,7 +259,7 @@ export default {
       }
       // 主题切换事件
       minder.on('themechange', function (e) {
-        pathHandler = self.getPathHandler(e.theme)
+        // pathHandler = self.getPathHandler(e.theme)
       });
     }catch (e) {
       if(e instanceof SyntaxError){
