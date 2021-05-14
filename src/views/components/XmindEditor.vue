@@ -20,7 +20,10 @@ export default {
   },
   methods: {
     save() {
-      this.$refs.child.savesave();
+      this.$refs.child.savesave()
+    },
+    sendMessage(msg) {
+      this.$refs.child.onsend(msg)
     }
   }
 }

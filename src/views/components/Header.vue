@@ -40,17 +40,20 @@ export default {
 		showMenu: function (e) {
 			for (var variable in this.switchShow) {
 				if (this.switchShow.hasOwnProperty(variable)) {
-					this.switchShow[variable] = false;
+					this.switchShow[variable] = false
 				}
 			}
-			this['switchShow'][e.target.className.replace('btn-', '')] = true;
-			this.$store.commit('setSwitchShow', this.switchShow);
+			this['switchShow'][e.target.className.replace('btn-', '')] = true
+			this.$store.commit('setSwitchShow', this.switchShow)
 		},
-		save: function () {
-			this.$parent.save();
+		save () {
+			this.$parent.save()
 		},
-	},
-};
+    sendMessage(msg) {
+      this.$parent.sendMessage(msg)
+    }
+	}
+}
 </script>
 
 <style lang="scss">

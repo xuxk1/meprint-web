@@ -10,6 +10,9 @@
   <custom-box></custom-box>
    <expand></expand>
   <selection></selection>
+  <div>
+    <switchLock v-model="value" text="on|off" @change="sendMessage"></switchLock>
+  </div>
   <div class='menu-button'>
     <el-button type="primary" @click="save" size="medium">保存</el-button>
   </div>
@@ -26,6 +29,7 @@ import progressBox from './progressBox'
 import expand from './expand'
 import selection from './selection'
 import attachment from './attachment'
+import switchLock from '../../Switch'
 
 export default {
 	name: 'editMenu',
@@ -38,12 +42,30 @@ export default {
 		expand,
 		selection,
 		customBox,
-		attachment
+		attachment,
+    switchLock
 	},
+  data() {
+	  return {
+	    value: '',
+      messageType: 2
+    }
+  },
 	methods: {
 		save() {
 			this.$parent.save()
-		}
+		},
+    sendMessage(val) {
+      let messageLock = 'lock'
+      let messgeUnlock = 'unlock'
+      if (val === true) {
+        this.$parent.sendMessage(this.messageType + messgeUnlock)
+        this.$notify.success('解�成功')
+      }else {
+        this.$parent.sendMessage(this.messageType + messageLock)
+        this.$notify.success('上�成功')
+      }
+    }
 	}
 }
 </script>
