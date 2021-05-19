@@ -91,6 +91,7 @@ define(function (require, exports, module) {
       }
     }
 
+    minder &&
     minder.on('mousedown', function (e) {
       flag = MOUSE_HAS_DOWN;
       var rect = minder.getPaper().container.getBoundingClientRect();
@@ -101,6 +102,7 @@ define(function (require, exports, module) {
       maxY = rect.height;
     });
 
+    minder &&
     minder.on('mousemove', function (e) {
       if (fsm.state() === 'drag' && flag == MOUSE_HAS_DOWN && minder.getSelectedNode() &&
         (Math.abs(downX - e.originEvent.clientX) > BOUND_CHECK ||

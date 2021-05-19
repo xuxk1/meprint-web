@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       zoom: 100,
-      isNavOpen: true,
+      isNavOpen: false,
       $previewNavigator: '',
       paper: '',
       nodeThumb: '',
@@ -168,21 +168,21 @@ export default {
 
     updateContentView() {
       let self = this;
-      let view = self.minder.getRenderContainer().getBoundaryBox();
-      self.contentView = view;
-      let padding = 30;
+      var view = self.minder.getRenderContainer().getBoundaryBox()
+      self.contentView = view
+      let padding = 30
       self.paper.setViewBox(
         view.x - padding - 0.5,
         view.y - padding - 0.5,
         view.width + padding * 2 + 1,
         view.height + padding * 2 + 1
       );
-      var nodePathData = [];
-      let connectionThumbData = [];
+      var nodePathData = []
+      var connectionThumbData = []
       self.minder.getRoot().traverse(function (node) {
         let box = node.getLayoutBox();
-        try{
-          self.pathHandler(nodePathData, box.x, box.y, box.width, box.height);
+        try {
+          self.pathHandler(nodePathData, box.x, box.y, box.width, box.height)
         }catch (e) {
           if(e instanceof SyntaxError){
             console.log('handle this expected error')
@@ -193,10 +193,10 @@ export default {
           console.log('finally_statements')
         }
         if (node.getConnection() && node.parent && node.parent.isExpanded()) {
-          connectionThumbData.push(node.getConnection().getPathData());
+          connectionThumbData.push(node.getConnection().getPathData())
         }
-      });
-      self.paper.setStyle('background', minder.getStyle('background'));
+      })
+      self.paper.setStyle('background', minder.getStyle('background'))
       if (nodePathData.length) {
         self.nodeThumb
           .fill(minder.getStyle('root-background'))
@@ -222,26 +222,26 @@ export default {
 
   mounted() {
     let self = this;
-    let minder = self.minder;
+    var minder = self.minder
 
     // 以下部分是缩略图导航器
-    self.$previewNavigator = $('.nav-previewer');
+    self.$previewNavigator = $('.nav-previewer')
 
     // 画布，渲染缩略图
-    self.paper = new kity.Paper(self.$previewNavigator[0]);
+    self.paper = new kity.Paper(self.$previewNavigator[0])
 
     // 用两个路径来挥之节点和连线的缩略图
-    self.nodeThumb = self.paper.put(new kity.Path());
-    self.connectionThumb = self.paper.put(new kity.Path());
+    self.nodeThumb = self.paper.put(new kity.Path())
+    self.connectionThumb = self.paper.put(new kity.Path())
 
     // 表示可视区域的矩形
     self.visibleRect = self.paper.put(
       new kity.Rect(100, 100).stroke('red', '1%')
     );
-    self.contentView = new kity.Box();
-    self.visibleView = new kity.Box();
+    self.contentView = new kity.Box()
+    self.visibleView = new kity.Box()
     try{
-      self.pathHandler = self.getPathHandler(minder.getTheme());
+      self.pathHandler = self.getPathHandler(minder.getTheme())
       minder.setDefaultOptions({
         zoom: self.config.zoom,
       })
@@ -260,7 +260,7 @@ export default {
       // 主题切换事件
       minder.on('themechange', function (e) {
         // pathHandler = self.getPathHandler(e.theme)
-      });
+      })
     }catch (e) {
       if(e instanceof SyntaxError){
         console.log('handle this expected error')
@@ -275,13 +275,23 @@ export default {
 
     function navigate() {
       function moveView(center, duration) {
-        var box = self.visibleView;
-        center.x = -center.x;
-        center.y = -center.y;
-        var viewMatrix = minder.getPaper().getViewPortMatrix();
-        box = viewMatrix.transformBox(box);
-        var targetPosition = center.offset(box.width / 2, box.height / 2);
-        minder.getViewDragger().moveTo(targetPosition, duration);
+        var box = self.visibleView
+        center.x = -center.x
+        center.y = -center.y
+        try {
+          var viewMatrix = minder.getPaper().getViewPortMatrix()
+          box = viewMatrix.transformBox(box)
+          var targetPosition = center.offset(box.width / 2, box.height / 2)
+          minder.getViewDragger().moveTo(targetPosition, duration)
+        }catch (e) {
+          if(e instanceof SyntaxError){
+            console.log('handle this expected error')
+          }else if(e instanceof TypeError){
+            console.log('handle unexpected error')
+          }
+        }finally {
+          console.log('finally_statements')
+        }
       }
       var dragging = false;
       self.paper.on('mousedown', function (e) {

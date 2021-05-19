@@ -33,7 +33,7 @@
             <date-range-picker v-model="query.createTime" class="date-item" />
             <rrOperation />
           </div>
-          <crudOperation show="" :permission="permission" />
+          <crudOperationXmind show="" :permission="permission" />
         </div>
         <!--表单渲染-->
         <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="570px">
@@ -84,10 +84,10 @@
               </el-select>
             </el-form-item>
             <el-form-item label="描述" prop="description">
-              <textarea v-model="form.description" class="text-area"  maxLength="1024" ></textarea>
+              <textarea v-model="form.description" class="text-area" maxLength="1024"/>
             </el-form-item>
             <el-form-item v-if="crud.status.add" label="上传">
-              <el-input v-model="form.file" v-if="false"></el-input>
+              <el-input v-if="false" v-model="form.file" />
               <el-upload
                 ref="upload"
                 :limit="1"
@@ -116,14 +116,14 @@
           <el-table-column :selectable="checkboxT" type="selection" width="55" />
           <el-table-column :show-overflow-tooltip="true" prop="id" label="序号" />
           <el-table-column :show-overflow-tooltip="true" prop="groupId" label="用例集ID" />
-          <el-table-column :show-overflow-tooltip="true" prop="title" label="用例集名称" >
+          <el-table-column :show-overflow-tooltip="true" prop="title" label="用例集名称">
             <template slot-scope="scope">
-              <el-link @click="getCaseInfo(scope.row.id)"><font color="#1890ff">{{scope.row.title}}</font></el-link>
+              <el-link @click="getCaseInfo(scope.row.id)"><font color="#1890ff">{{ scope.row.title }}</font></el-link>
             </template>
           </el-table-column>
           <el-table-column v-model="form.project.id" :load-options="loadProjects" :show-overflow-tooltip="true" prop="projectId" label="项目ID">
             <template slot-scope="scope">
-              <div>{{ scope.row.projectId}}</div>
+              <div>{{ scope.row.projectId }}</div>
             </template>
           </el-table-column>
           <el-table-column :show-overflow-tooltip="true" prop="creator" label="创建人" />
@@ -155,13 +155,10 @@
 <script>
 import cases from '@/api/system/case'
 import { getToken } from '@/utils/auth'
-import { isvalidPhone } from '@/utils/validate'
 import { getProjects, getProjectSuperior } from '@/api/system/project'
-import { getAll, getLevel } from '@/api/system/role'
-import { getAllJob } from '@/api/system/job'
 import CRUD, { presenter, header, form, crud } from '@crud/crudCase'
 import rrOperation from '@crud/RR.operation'
-import crudOperation from '@crud/CRUD.operation'
+import crudOperationXmind from '@crud/CRUD.operationXmind'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
 import DateRangePicker from '@/components/DateRangePicker'
@@ -169,12 +166,12 @@ import Treeselect from '@riophae/vue-treeselect'
 import { mapGetters } from 'vuex'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
-import Xmind from './xmind.vue'
+
 let userRoles = []
 let userProducts = []
-const initData = `{"root":{"data":{"id":"bv8nxhi3c800","created":1562059643204,"text":"中心主题"},"children":[]},"template":"default","theme":"fresh-blue","version":"1.4.43","base":0}`;
+const initData = `{"root":{"data":{"id":"bv8nxhi3c800","created":1562059643204,"text":"中心主题"},"children":[]},"template":"default","theme":"fresh-blue","version":"1.4.43","base":0}`
 const username = localStorage.getItem('username')
-var defaultForm = { id: null, creator: username, title: null, productLineId: 1, caseType: null, channel: 1, file: '', caseContent:initData,  bizId: -1, projectId: null, enabled: 'false', project: { id: null }, description: null, requirementId: 1}
+var defaultForm = { id: null, creator: username, title: null, productLineId: 1, caseType: null, channel: 1, file: '', caseContent: initData, bizId: -1, projectId: null, enabled: 'false', project: { id: null }, description: null, requirementId: 1 }
 export default {
   name: 'Case',
   components: { Treeselect, crudOperation, rrOperation, udOperation, pagination, DateRangePicker },
@@ -213,7 +210,7 @@ export default {
           { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
         ],
         chooseContent: [
-          { required: false, message: '请输入用例集分类', trigger: 'blur' },
+          { required: false, message: '请输入用例集分类', trigger: 'blur' }
         ]
       }
     }
@@ -225,7 +222,7 @@ export default {
     ])
   },
   watch: {
-    'form.projectId': 'changeProjectId',
+    'form.projectId': 'changeProjectId'
   },
   created() {
     this.crud.msg.add = '新增成功'
@@ -378,8 +375,8 @@ export default {
       this.$refs.upload.submit()
     },
     beforeUpload(file) {
-      let reader = new FileReader()
-      reader.readAsDataURL(file.raw);
+      const reader = new FileReader()
+      reader.readAsDataURL(file.raw)
       let isLt2M = true
       isLt2M = file.size / 1024 / 1024 < 100
       if (!isLt2M) {
@@ -410,7 +407,7 @@ export default {
       cases.getCaseInfo(id).then(res => {
         console.log('res=====' + id)
       })
-      this.$router.push({path: '/system/case/xmind', query: { caseId: id }})
+      this.$router.push({ path: '/system/case/xmind', query: { caseId: id }})
     }
   }
 }

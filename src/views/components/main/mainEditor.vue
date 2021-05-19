@@ -133,7 +133,7 @@ export default {
       console.log('接收信息', e.data)
       res = e.data
       if (res){
-        if (res && res.hasOwnProperty('当前用户数') !=-1 && res.hasOwnProperty('pong pong pong') !=-1) {
+        if (res && res.hasOwnProperty('当前用户数：') !=-1 && res.hasOwnProperty('pong pong pong') !=-1) {
           this.$notify.success(res)
           try{
             act = JSON.parse(res)
@@ -226,14 +226,13 @@ export default {
     //     console.log('webSocket连接关闭')
     //   }
     // },
-    naotu(ws,data){
-      let Editor = require('../../../script/editor')
-      let el = this.$el
-      let editor = (window.XmindEditor = new Editor(el))
+    naotu(ws, data) {
+      const Editor = require('../../../script/editor')
+      const el = this.$el
+      const editor = (window.XmindEditor = new Editor(el))
       var editXmindData = ''
       let contentchange = ''
-      let contentpatch = ''
-      let messageType = 1
+      const messageType = 1
       this.setEditor(editor)
       if (data) {
         editor.minder.importJson(data)
@@ -244,17 +243,17 @@ export default {
         contentchange.base = 0
         resultData = contentchange
         console.log('editXmindData========' + editXmindData)
-        let messagejson = {
-          "case": resultData,
-          "patch": [
+        const messagejson = {
+          'case': resultData,
+          'patch': [
             [{
-              "op": "replace",
-              "path": contentchange.path,
-              "value": contentchange.root.data.text
+              'op': 'replace',
+              'path': contentchange.path,
+              'value': contentchange.root.data.text
             }]
           ]
         }
-        let message = JSON.stringify(messagejson).replace(/\\/g,'')
+        const message = JSON.stringify(messagejson).replace(/\\/g, '')
         console.log('message====' + message)
         ws.send(messageType + message)
       })
@@ -270,7 +269,7 @@ export default {
       }
       return new Promise((resolve, reject) => {
         Xmindupdate(params).then(response => {
-          if (response.code == 200){
+          if (response.code === 200) {
             this.$notify.success('更新成功')
           }
         }).catch(error => {

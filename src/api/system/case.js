@@ -6,22 +6,22 @@ export function add(data) {
   console.log('data======' + data.file)
   const file = data.file
   const url = 'api/file/import'
-  const formData = new FormData();
-  formData.append("file", file)
+  const formData = new FormData()
+  formData.append('file', file)
   formData.append('creator', data.creator)
   formData.append('title', data.title)
   formData.append('projectId', data.projectId)
   formData.append('productLineId', data.productLineId)
   formData.append('caseType', data.caseType)
   formData.append('requirementId', data.requirementId)
-  formData.append('description',data.description)
-  formData.append('channel',data.channel)
-  formData.append('bizId',data.bizId)
+  formData.append('description', data.description)
+  formData.append('channel', data.channel)
+  formData.append('bizId', data.bizId)
   const config = {
     'Authorization': getToken(),
     'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryyyi77zdj6shfaI9l'
   }
-  if (file){
+  if (file) {
     return request({
       url: url,
       method: 'post',
@@ -57,9 +57,8 @@ export function Xmindupdate(data) {
     url: 'api/case/update',
     method: 'post',
     headers: {
-    'Authorization': getToken(),
-    'Content-Type' : 'application/json'
-    },
+      'Authorization': getToken(),
+      'Content-Type': 'application/json' },
     data: data
   })
 }

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <header-menu></header-menu>
+    <header-menu/>
     <main-editor ref="child"></main-editor>
-    <navigator></navigator>
+    <navigator/>
   </div>
 </template>
 

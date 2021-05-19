@@ -1,10 +1,10 @@
-import { initData, download } from '@/api/data'
-import { parseTime, downloadFile } from '@/utils/index'
+import { initData } from '@/api/data'
+import { parseTime, downloadXmindFile } from '@/utils/index'
 import Vue from 'vue'
 
 /**
  * CRUD配置
- * @author moxun
+ * @author xuxk
  * @param {*} options <br>
  * @return crud instance.
  * @example
@@ -85,7 +85,8 @@ function CRUD(options) {
       submit: '提交成功',
       add: '新增成功',
       edit: '编辑成功',
-      del: '删除成功'
+      del: '删除成功',
+      download: '下载成功'
     },
     page: {
       // 页码
@@ -325,16 +326,23 @@ function CRUD(options) {
       })
     },
     /**
-     * 通用导出
+     * 导出
      */
-    doExport() {
+    doExport(data) {
       crud.downloadLoading = true
-      download(crud.url + '/download', crud.getQueryParams()).then(result => {
-        downloadFile(result, crud.title + '数据', 'xlsx')
+      let url = ''
+      let back = ''
+      if (data && data[0].id && data[0].id !==null && data[0].id !=='') {
+        url = '/api/file/export?id=' + data[0].id
+      }
+       back = downloadXmindFile(url, data[0].title)
+      if (back === 1) {
         crud.downloadLoading = false
-      }).catch(() => {
+        crud.notify(crud.msg.download, CRUD.NOTIFICATION_TYPE.SUCCESS)
+      }else {
         crud.downloadLoading = false
-      })
+        crud.notify('下载失败', CRUD.NOTIFICATION_TYPE.WARNING)
+      }
     },
     /**
      * 获取查询参数

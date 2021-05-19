@@ -219,16 +219,12 @@ export default {
     },
     // 改变状态
     changeEnabled(data, val) {
-      console.log('data======' + data.depts)
-      console.log('val======' + val)
-      console.log('dept_status======' + this.dict.label.dept_status[val])
       this.$confirm('此操作将 "' + this.dict.label.dept_status[val] + '" ' + data.name + '部门, 是否继续？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
         crudDept.edit(data).then(res => {
-          console.log('dept_status=====' + this.dict.label.dept_status[val])
           this.crud.notify(this.dict.label.dept_status[val] + '成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
         }).catch(err => {
           data.enabled = !data.enabled
