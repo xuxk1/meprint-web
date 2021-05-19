@@ -9,6 +9,7 @@ import { Xmindupdate } from '@/api/system/case'
 
 var resultData = null
 const username = localStorage.getItem('username')
+const wsUri = process.env.VUE_APP_WS_API
 export default {
   data() {
     return {
@@ -51,7 +52,7 @@ export default {
       "version": "1.4.43",
       "base": "16"
     }
-    this.wsUrl = 'ws://localhost:9013/api/case/' + this.caseId + '/undefined/0/' + username + '/' + getToken()
+    this.wsUrl = wsUri + '/api/case/' + this.caseId + '/undefined/0/' + username + '/' + getToken()
     this.ws = (window.ws = new WebSocket(this.wsUrl))
     this.initWebsocket(this.ws)
     window.addEventListener('beforeunload', e => this.onclose(e))

@@ -64,13 +64,23 @@ export function Xmindupdate(data) {
 }
 
 export function upload(api, file) {
-  var data = new FormData()
+  const data = new FormData()
   data.append('file', file)
   const config = {
     headers: { 'Authorization': getToken(),
                'Content-Type': 'multipart/form-data'}
   }
   return axios.post(api, data, config)
+}
+
+export function download(id) {
+  const api = '/api/file/export?id=' + id
+  const config = {
+    headers: { 'Authorization': getToken(),
+      'Content-Type': 'application/octet-stream'},
+    responseType: 'blob'
+  }
+  return axios.get(api, config)
 }
 
 export function queryList(data) {

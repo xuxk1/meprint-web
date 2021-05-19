@@ -1,4 +1,5 @@
 import { initData } from '@/api/data'
+import { download } from '@/api/system/case'
 import { parseTime, downloadXmindFile } from '@/utils/index'
 import Vue from 'vue'
 
@@ -329,20 +330,18 @@ function CRUD(options) {
      * 导出
      */
     doExport(data) {
-      crud.downloadLoading = true
-      let url = ''
-      let back = ''
-      if (data && data[0].id && data[0].id !==null && data[0].id !=='') {
-        url = '/api/file/export?id=' + data[0].id
-      }
-       back = downloadXmindFile(url, data[0].title)
-      if (back === 1) {
+      download(data[0].id).then(result => {
         crud.downloadLoading = false
-        crud.notify(crud.msg.download, CRUD.NOTIFICATION_TYPE.SUCCESS)
-      }else {
+        if(result.data.type) {
+          downloadXmindFile(result, data[0].title, 'xmind')
+          crud.notify(crud.msg.download, CRUD.NOTIFICATION_TYPE.SUCCESS)
+        }else {
+          crud.notify('下载失败', CRUD.NOTIFICATION_TYPE.WARNING)
+        }
+      }).catch(() => {
         crud.downloadLoading = false
-        crud.notify('下载失败', CRUD.NOTIFICATION_TYPE.WARNING)
-      }
+        crud.notify('下载失败', CRUD.NOTIFICATION_TYPE.ERROR)
+      })
     },
     /**
      * 获取查询参数

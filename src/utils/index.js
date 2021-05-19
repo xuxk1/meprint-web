@@ -387,14 +387,18 @@ export function downloadFile(obj, name, suffix) {
   document.body.removeChild(link)
 }
 
-export function downloadXmindFile(fileUrl, fileName) {
-  const url = fileUrl
+export function downloadXmindFile(obj, name, suffix) {
+  const blob = new Blob([obj.data], {
+    type: 'application/vnd.ms-excel'
+  })
+  const url = window.URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.style.display = 'none'
   link.href = url
+  const fileName = name + '.' + suffix
   link.setAttribute('download', fileName)
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
-  return 1
+  window.URL.revokeObjectURL(link)
 }
