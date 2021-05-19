@@ -174,7 +174,7 @@ const username = localStorage.getItem('username')
 var defaultForm = { id: null, creator: username, title: null, productLineId: 1, caseType: null, channel: 1, file: '', caseContent: initData, bizId: -1, projectId: null, enabled: 'false', project: { id: null }, description: null, requirementId: 1 }
 export default {
   name: 'Case',
-  components: { Treeselect, crudOperation, rrOperation, udOperation, pagination, DateRangePicker },
+  components: { Treeselect, crudOperationXmind, rrOperation, udOperation, pagination, DateRangePicker },
   cruds() {
     const params = {
       productLineId: 1,
