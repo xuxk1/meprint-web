@@ -9,7 +9,7 @@ import { Xmindupdate } from '@/api/system/case'
 
 var resultData = null
 const username = localStorage.getItem('username')
-const wsUri = process.env.VUE_APP_WS_API
+const wsUri = process.env.VUE_APP_BASE_SITE
 export default {
   data() {
     return {
