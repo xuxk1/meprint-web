@@ -14,7 +14,7 @@
 <script>
 import {
   mapGetters
-} from 'Vuex'
+} from 'vuex'
 export default {
   name: 'MoveBox',
   computed: {
