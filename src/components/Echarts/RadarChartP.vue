@@ -82,7 +82,7 @@ export default {
           })
         }).catch(error => {
           reject(error)
-          alert(error)
+          this.$notify.error('接口相应超时')
         })
       })
     },

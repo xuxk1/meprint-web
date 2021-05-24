@@ -47,7 +47,6 @@
         size="mini"
         type="warning"
         icon="el-icon-download"
-        target="_blank"
         :disabled="crud.selections.length !== 1"
         @click="crud.doExport(crud.selections)"
       >导出</el-button>
