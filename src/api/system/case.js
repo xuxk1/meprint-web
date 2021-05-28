@@ -87,7 +87,7 @@ export function queryList(data) {
   return request({
     url: 'api/case/list',
     method: 'get',
-    data
+    params: data
   })
 }
 
@@ -119,7 +119,7 @@ export function countByCondition(data) {
   return request({
     url: 'api/case/countByCondition',
     method: 'get',
-    data
+    params: data
   })
 }
 

@@ -129,6 +129,7 @@ module.exports = {
           config.optimization.runtimeChunk('single')
         }
       )
+    config.resolve.symlinks(true)
   },
   transpileDependencies: [
     'vue-echarts',

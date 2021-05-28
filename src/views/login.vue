@@ -119,7 +119,6 @@ export default {
           code: this.loginForm.code,
           uuid: this.loginForm.uuid
         }
-        console.log('login_username=======' + this.loginForm.username)
         localStorage.setItem('username', user.username)
         if (user.password !== this.cookiePass) {
           user.password = encrypt(user.password)

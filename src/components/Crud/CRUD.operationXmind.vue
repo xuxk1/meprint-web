@@ -101,7 +101,7 @@
   </div>
 </template>
 <script>
-import CRUD, { crud } from '@crud/crud'
+import CRUD, { crud } from '@crud/crudCase'
 
 function sortWithRef(src, ref) {
   const result = Object.assign([], ref)

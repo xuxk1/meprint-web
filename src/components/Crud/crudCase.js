@@ -3,6 +3,7 @@ import { download } from '@/api/system/case'
 import { parseTime, downloadXmindFile } from '@/utils/index'
 import Vue from 'vue'
 
+
 /**
  * CRUD配置
  * @author xuxk
@@ -97,6 +98,7 @@ function CRUD(options) {
       // 总数据条数
       total: 0
     },
+    id: 0,
     // 整体loading
     loading: false,
     // 导出的 Loading
@@ -139,9 +141,17 @@ function CRUD(options) {
             table.store.states.treeData = {}
             table.store.states.lazyTreeNodeMap = {}
           }
-          crud.page.total = data.total
-          crud.data = data.dataSources
-          crud.resetDataStatus()
+          if (crud.title === '用例管理') {
+            crud.page.total = data.total
+            crud.data = data.dataSources
+          }else if (crud.title === '测试任务') {
+            crud.page.total = data.data.length
+            crud.data = data.data
+          }
+
+          if (crud.page.total > 0) {
+            crud.resetDataStatus()
+          }
           // time 毫秒后显示表格
           setTimeout(() => {
             crud.loading = false
@@ -358,6 +368,7 @@ function CRUD(options) {
         page: crud.page.page - 1,
         size: crud.page.size,
         sort: crud.sort,
+        id: crud.caseId,
         ...crud.query,
         ...crud.params
       }

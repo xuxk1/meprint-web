@@ -39,7 +39,7 @@
         <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="570px">
           <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="66px">
             <el-form-item label="用例集名称" width="80px" prop="title">
-              <el-input v-model="form.title" />
+              <el-input v-model="form.title" placeholder="输入用例集名称" />
             </el-form-item>
             <el-form-item label="用例集分类" prop="projectId">
               <treeselect
@@ -84,7 +84,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="描述" prop="description">
-              <textarea v-model="form.description" class="text-area" maxLength="1024"/>
+              <textarea v-model="form.description" class="ant-input" maxLength="1024" style="width: 436px"/>
             </el-form-item>
             <el-form-item v-if="crud.status.add" label="上传">
               <el-input v-if="false" v-model="form.file" />
@@ -283,13 +283,13 @@ export default {
         })
         return false
       }
-      if (!crud.form.caseType) {
-        this.$message({
-          message: '用例类型选项不能为空',
-          type: 'warning'
-        })
-        return false
-      }
+      // if (!crud.form.caseType) {
+      //   this.$message({
+      //     message: '用例类型选项不能为空',
+      //     type: 'warning'
+      //   })
+      //   return false
+      // }
       crud.form.roles = userRoles
       crud.form.products = userProducts
       return true
@@ -405,7 +405,7 @@ export default {
     },
     getCaseInfo(id) {
       cases.getCaseInfo(id).then(res => {
-        console.log('res=====' + id)
+        console.log('res=====' + res)
       })
       this.$router.push({ path: '/system/case/xmind', query: { caseId: id }})
     }
@@ -418,22 +418,36 @@ export default {
     height: 30px;
     line-height: 30px;
   }
-  .text-area {
-    width: 178px;
-    border-top:1px solid gainsboro;
-    border-bottom:1px solid gainsboro;
+  textarea.ant-input {
+    max-width: 100%;
+    height: auto;
+    min-height: 32px;
+    line-height: 1.5;
+    vertical-align: bottom;
+    transition: all .3s,height 0s;
   }
-  .text-area textarea {
+  .ant-input {
+    box-sizing: border-box;
+    margin: 0;
+    font-variant: tabular-nums;
+    list-style: none;
+    font-feature-settings: "tnum";
+    position: relative;
+    display: inline-block;
     width: 100%;
-    margin: 0.75rem  0;
-    border: none;
-    outline: none;
-    padding-left: 1.125rem;
-    height: 6.5rem ;
+    height: 32px;
+    padding: 4px 11px;
+    color: rgba(0,0,0,.65);
+    font-size: 14px;
+    line-height: 1.5;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    transition: all .3s;
   }
-
-  .text-area textarea::-webkit-input-placeholder {
-    color: #9E9E9E;
-
+  textarea {
+    overflow: auto;
+    resize: vertical;
   }
 </style>
