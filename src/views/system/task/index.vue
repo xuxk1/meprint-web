@@ -98,7 +98,7 @@
                     <el-col>
                       <el-form-item label="标签" prop="resource">
 <!--                        <el-input v-model="formDate.resources" placeholder="标签" clearable :disabled="btnStatus" style="width: 200px" />-->
-                        <el-select v-model="formDate.resource" multiple placeholder="标签" @change="setResource(formDate.resources, form.caseId)" :disabled="btnStatus" style="width: 200px">
+                        <el-select v-model="formDate.resource" multiple placeholder="标签" @change="setResource(formDate.resource, form.caseId)" :disabled="btnStatus" style="width: 200px">
                           <el-option v-for="item in resources" :key="item.label" :label="item.label" :value="item.label"></el-option>
                         </el-select>
                       </el-form-item>
@@ -189,6 +189,7 @@ export default {
         prioritylist: null,
         resource: null
       },
+      prioritys: [],
       resources: [],
       caseDatas: [],
       Cases: [],
@@ -292,7 +293,6 @@ export default {
               })
             }
           })
-          console.log('resource======' + this.resources.tags)
           this.form.chooseContent = { 'priority':[0], 'resource':[]}
         }
       }).catch(error => {
@@ -301,30 +301,53 @@ export default {
       })
     },
     setPriority(val, caseId) {
-      this.form.chooseContent.priority = val
-      console.log('priority=====' + this.form.chooseContent.priority)
-      console.log('caseId=======' + caseId)
-      const selectOption = []
-      selectOption.push(val)
-      const params = {
-        caseId: caseId,
-        priority: selectOption.toString(),
-        resource: ''
-      }
-      cases.countByCondition(params).then(res => {
-        if (res.code === 200) {
-          this.selectCaseCount = res.data.count
-          this.form.chooseContent = { 'priority':selectOption.toString(), 'resource':[]}
+      this.form.chooseContent.priority = []
+      if (val && caseId) {
+        const selectOption = []
+        const params = {
+          caseId: caseId,
+          priority: selectOption.toString(),
+          resource: ''
         }
+        val.forEach(data => {
+          selectOption.push(data)
+        })
+        this.prioritys = selectOption.toString()
+        this.form.chooseContent.priority = selectOption
         this.radioBtnStatus = false
-      }).catch(error => {
-        reject(error)
-        this.$notify.error('异步获取数据失败')
-      })
-    },
-    setResource(val) {
-      if (val) {
 
+        cases.countByCondition(params).then(res => {
+          if (res.code === 200) {
+            this.selectCaseCount = res.data.count
+          }
+        }).catch(error => {
+          reject(error)
+          this.$notify.error('异步获取数据失败')
+        })
+      }
+    },
+    setResource(val, caseId) {
+      this.form.chooseContent.resource = []
+      if (val && caseId) {
+        const selectReource = []
+        const params = {
+          caseId: caseId,
+          priority: this.prioritys,
+          resource: selectReource.toString()
+        }
+        val.forEach(data => {
+          selectReource.push(data)
+        })
+        this.form.chooseContent.resource = selectReource
+        this.radioBtnStatus = false
+        cases.countByCondition(params).then(res => {
+          if (res.code === 200) {
+            this.selectCaseCount = res.data.count
+          }
+        }).catch(error => {
+          reject(error)
+          this.$notify.error('异步获取数据失败')
+        })
       }
     },
     // 新增与编辑前做的操作
@@ -333,11 +356,15 @@ export default {
         this.caseCount = 0
         this.radioBtnStatus = true
         this.formDate.content = ''
+        this.formDate.StartTime = ''
+        this.formDate.EndTime = ''
         this.getCases()
       } else if (form.caseId != null) {
         this.getSupCases(form.caseId)
         this.formDate.StartTime = this.form.expectStartTime
         this.formDate.EndTime = this.form.expectEndTime
+        this.formDate.prioritylist = this.form.chooseContent.priority
+        this.formDate.resource = this.form.chooseContent.resource
         this.getCaseCount(form.caseId)
         this.radioBtnStatus = false
         this.formDate.content = true
