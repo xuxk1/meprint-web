@@ -30,7 +30,7 @@
         <div class="head-container">
           <div v-if="crud.props.searchToggle">
             <!-- 搜索 -->
-            <el-input v-model="query.blurry" clearable size="small" placeholder="输入内容模糊搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+            <el-input v-model="query.id" clearable size="small" placeholder="输入内容模糊搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
             <date-range-picker v-model="query.createTime" class="date-item" />
             <rrOperation />
           </div>
@@ -68,7 +68,7 @@
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="用例集分类" prop="caseId">
-              <el-select v-model="form.caseId" placeholder="请选择用例集" size="small" @change="getCaseCount(form.caseId)" style="width: 220px">
+              <el-select v-model="form.caseId" placeholder="请选择用例集" size="small" @change="selectCases(form.caseId)" style="width: 220px">
                 <el-option v-for="item in Cases" :key="item.value" :label="item.title" :value="item.id"></el-option>
               </el-select>
             </el-form-item>
@@ -78,13 +78,13 @@
             </el-form-item>
             <el-form-item label="选择用例集" prop="chooseContent">
               <el-radio-group v-model="formDate.content" :disabled="radioBtnStatus" style="width: 556px">
-                <el-radio :label="true" style="display: block; height: 50px; margin-top: 10px; font-size: 14px;" prop="priority" @change="caseSelect(formDate.content,form.caseId)">
+                <el-radio :label="true" style="display: block; height: 50px; margin-top: 10px; font-size: 14px;" @change="caseSelect(formDate.content,form.caseId)">
                   包含全部用例
                   <p class="small-size-font">
                     覆盖全部可用用例（共计{{caseCount}}个），如果用例集库有新增的用例，会自动加入到本计划中
                   </p>
                 </el-radio>
-                <el-radio :label="false" style="display: block; height: 80px; margin-top: 10px; font-size: 14px;" prop="resource" @change="caseSelect(formDate.content,form.caseId)">
+                <el-radio :label="false" style="display: block; height: 80px; margin-top: 10px; font-size: 14px;" @change="caseSelect(formDate.content,form.caseId)">
                   手动圈选用例集
                   <el-row :gutter="15" :disabled="btnStatus" style="display: block; height: 80px; margin-top: 10px; font-size: 14px;">
                     <el-col>
@@ -171,7 +171,7 @@ import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
 
 const username = localStorage.getItem('username')
-const defaultForm = { caseId: null, title: null, creator: username, modifier: username, chooseContent: { priority:[], resource:[] }, description: null, expectEndTime: null, expectStartTime: null, owner: null, executors: null}
+const defaultForm = { id: null, caseId: null, title: null, creator: username, modifier: username, chooseContent: {"priority":[],"resource":[]}, description: null, expectEndTime: null, expectStartTime: null, owner: null, executors: null}
 export default {
   name: 'Task',
   components: { Treeselect, pagination, crudOperation, rrOperation, DateRangePicker },
@@ -196,6 +196,7 @@ export default {
       caseName: '',
       caseCount: '',
       selectCaseCount: '',
+      means : '',
       defaultProps: { children: 'children', label: 'title', isLeaf: 'leaf' },
       permission: {
         add: ['admin', 'task:add'],
@@ -231,6 +232,7 @@ export default {
   created() {
     this.caseCount = 0
     this.selectCaseCount = 0
+    this.means = 'add'
   },
   methods: {
     // 执行
@@ -283,17 +285,18 @@ export default {
       that.formDate.resource = []
       that.selectCaseCount = 0
       that.btnStatus=(val===true)?true:false
+      this.form.chooseContent = {"priority":[],"resource":[]}
+
       cases.countByCondition({caseId: caseId, priority: '', resource: ''}).then(res => {
         if (res.code === 200 && res.data.taglist) {
-          const tags = res.data.taglist
+          const tags = new Set(res.data.taglist)
           tags.forEach(tag => {
             if (tag) {
-              this.resources.push({
+              that.resources.push({
                 'label': tag
               })
             }
           })
-          this.form.chooseContent = { 'priority':[0], 'resource':[]}
         }
       }).catch(error => {
         reject(error)
@@ -301,21 +304,22 @@ export default {
       })
     },
     setPriority(val, caseId) {
-      this.form.chooseContent.priority = []
       if (val && caseId) {
         const selectOption = []
         const params = {
           caseId: caseId,
-          priority: selectOption.toString(),
+          priority: val.toString(),
           resource: ''
+        }
+        if (this.means === 'edit' && this.formDate.resource !==undefined) {
+          console.log('setPriority=====' + this.formDate.resource)
+          params['resource'] = this.formDate.resource.toString()
         }
         val.forEach(data => {
           selectOption.push(data)
         })
-        this.prioritys = selectOption.toString()
-        this.form.chooseContent.priority = selectOption
+        this.prioritys = val.toString()
         this.radioBtnStatus = false
-
         cases.countByCondition(params).then(res => {
           if (res.code === 200) {
             this.selectCaseCount = res.data.count
@@ -324,21 +328,34 @@ export default {
           reject(error)
           this.$notify.error('异步获取数据失败')
         })
+        if (this.means === 'add') {
+          this.form.chooseContent.priority = selectOption
+        }
+        if (this.means === 'edit') {
+          this.form.chooseContent.priority = selectOption
+        }
       }
     },
     setResource(val, caseId) {
-      this.form.chooseContent.resource = []
+      let selectReource = []
       if (val && caseId) {
-        const selectReource = []
         const params = {
           caseId: caseId,
-          priority: this.prioritys,
-          resource: selectReource.toString()
+          priority: '',
+          resource: val.toString()
         }
+        if (this.means === 'edit' && this.formDate.prioritylist !==undefined) {
+          console.log('setResource=========88888' + this.formDate.prioritylist + '99999999')
+          params['priority'] = this.formDate.prioritylist.toString()
+        }
+        const set = new Set(this.resources)
+        this.resources = set
         val.forEach(data => {
+          // this.resources.push({
+          //   'label': data
+          // })
           selectReource.push(data)
         })
-        this.form.chooseContent.resource = selectReource
         this.radioBtnStatus = false
         cases.countByCondition(params).then(res => {
           if (res.code === 200) {
@@ -348,26 +365,36 @@ export default {
           reject(error)
           this.$notify.error('异步获取数据失败')
         })
+        if (this.means === 'edit' && this.form.chooseContent) {
+          console.log('selectReource=====' + selectReource)
+          this.form.chooseContent.resource = selectReource
+        }
+        if (this.means === 'add') {
+          console.log('adddddd')
+          this.form.chooseContent.resource = selectReource
+        }
       }
     },
     // 新增与编辑前做的操作
     [CRUD.HOOK.afterToCU](crud, form) {
-      if (form.caseId == null) {
-        this.caseCount = 0
+      if (form.caseId == null && form.id === null) {
         this.radioBtnStatus = true
         this.formDate.content = ''
         this.formDate.StartTime = ''
         this.formDate.EndTime = ''
+        this.formDate.prioritylist = ''
+        this.formDate.resource = ''
         this.getCases()
-      } else if (form.caseId != null) {
+      } else if (form.caseId !== null && form.id !==null) {
         this.getSupCases(form.caseId)
-        this.formDate.StartTime = this.form.expectStartTime
-        this.formDate.EndTime = this.form.expectEndTime
-        this.formDate.prioritylist = this.form.chooseContent.priority
-        this.formDate.resource = this.form.chooseContent.resource
-        this.getCaseCount(form.caseId)
-        this.radioBtnStatus = false
-        this.formDate.content = true
+        this.formDate.StartTime = form.expectStartTime
+        this.formDate.EndTime = form.expectEndTime
+        const prioritylist = JSON.parse(form.chooseContent).priority
+        const resource = JSON.parse(form.chooseContent).resource
+        console.log('formId=====' + form.id)
+        console.log('prioritylist======' + prioritylist + '\n' + 'resource======' + resource)
+        this.means = 'edit'
+        this.editInit(form.caseId, prioritylist, resource)
       }
     },
     // 提交前做的操作
@@ -447,18 +474,58 @@ export default {
         this.Cases.push(date)
       })
     },
-    getCaseCount(id) {
-      this.formDate.prioritylist = []
-      this.selectCaseCount = 0
-      cases.countByCondition({ caseId: id, priority: '', resource: '' }).then(res => {
+    selectCases(id) {
+        cases.countByCondition({ caseId: id, priority: '', resource: '' }).then(res => {
         if (res.code === 200) {
           this.caseCount = res.data.totalCount
-          console.log('caseCount111======' + this.caseCount)
         }
-        this.radioBtnStatus = false
+          this.radioBtnStatus = false
+          this.formDate.content = true
       }).catch(error => {
         reject(error)
         this.$notify.error('异步获取数据失败')
+      })
+    },
+    editInit(id, priority, resource) {
+      let that = this
+      that.formDate.prioritylist = []
+      that.formDate.resource = []
+      that.selectCaseCount = 0
+      that.resources = []
+      const params = { caseId: id, priority: '', resource: '' }
+      if (priority.length > 0 || resource.length > 0) {
+        that.radioBtnStatus = false
+        that.formDate.content = false
+        that.btnStatus = false
+        if (priority && priority !==null && priority !==undefined && priority !=='') {
+          params['priority'] = priority.toString()
+          that.formDate.prioritylist = priority
+        }
+        if (resource && resource !==null && priority !==undefined && resource !=='') {
+          params['resource'] = resource.toString()
+          that.formDate.resource = resource
+          const tags = new Set(resource)
+          tags.forEach(tag => {
+            if (tag) {
+              that.resources.push({
+                'label': tag
+              })
+            }
+          })
+        }
+        console.log('自动圈选======' + that.form.chooseContent)
+      }else {
+        that.radioBtnStatus = false
+        that.formDate.content = true
+        that.formDate.resource = false
+      }
+      cases.countByCondition(params).then(res => {
+        if (res.code === 200) {
+          that.caseCount = res.data.totalCount
+        }
+      }).catch(error => {
+        reject(error)
+        that.$notify.error('异步获取数据失败')
       })
     },
     // 切换项目

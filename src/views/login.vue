@@ -2,7 +2,7 @@
   <div class="login" :style="'background-image:url('+ Background +');'">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" label-position="left" label-width="0px" class="login-form">
       <h3 class="title">
-        MePrint 质量管理平台
+<!--        MePrint 质量管理平台-->
       </h3>
       <el-form-item prop="username">
         <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
@@ -48,7 +48,7 @@ import { encrypt } from '@/utils/rsaEncrypt'
 import Config from '@/settings'
 import { getCodeImg } from '@/api/login'
 import Cookies from 'js-cookie'
-import Background from '@/assets/images/background.jpg'
+import Background from '@/assets/images/background1.jpg'
 import PanelGroup from './dashboard/PanelGroup'
 export default {
   name: 'Login',
@@ -172,7 +172,8 @@ export default {
     background-size: cover;
   }
   .title {
-    margin: 0 auto 30px auto;
+    /*margin: 0 auto 30px auto;*/
+    margin: 0 auto 0px auto;
     text-align: center;
     color: #707070;
   }

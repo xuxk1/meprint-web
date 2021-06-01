@@ -135,7 +135,7 @@ export default {
       res = e.data
       if (res){
         if (res && res.hasOwnProperty('当前用户数：') !=-1 && res.hasOwnProperty('pong pong pong') !=-1) {
-          this.$notify.success(res)
+          // this.$notify.success(res)
           try{
             act = JSON.parse(res)
             if (act.hasOwnProperty('template')) {
