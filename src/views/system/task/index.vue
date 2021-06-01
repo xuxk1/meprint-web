@@ -312,7 +312,6 @@ export default {
           resource: ''
         }
         if (this.means === 'edit' && this.formDate.resource !==undefined) {
-          console.log('setPriority=====' + this.formDate.resource)
           params['resource'] = this.formDate.resource.toString()
         }
         val.forEach(data => {
@@ -346,15 +345,11 @@ export default {
           resource: val.toString()
         }
         if (this.means === 'edit' && this.formDate.prioritylist !==undefined) {
-          console.log('setResource=========88888' + this.formDate.prioritylist + '99999999')
           params['priority'] = this.formDate.prioritylist.toString()
         }
         const set = new Set(this.resources)
         this.resources = set
         val.forEach(data => {
-          // this.resources.push({
-          //   'label': data
-          // })
           selectReource.push(data)
         })
         this.radioBtnStatus = false
@@ -368,11 +363,9 @@ export default {
           this.$notify.error('异步获取数据失败')
         })
         if (this.means === 'edit' && this.form.chooseContent) {
-          console.log('selectReource=====' + selectReource)
           this.form.chooseContent = this.form.chooseContent = {'priority': this.formDate.prioritylist, 'resource': selectReource }
         }
         if (this.means === 'add') {
-          console.log('adddddd')
           this.form.chooseContent.resource = selectReource
         }
       }
@@ -514,7 +507,6 @@ export default {
             }
           })
         }
-        console.log('自动圈选======' + that.form.chooseContent)
       }else {
         that.selectCaseCount = 0
         that.radioBtnStatus = false
