@@ -171,7 +171,7 @@ import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
 
 const username = localStorage.getItem('username')
-const defaultForm = { id: null, caseId: null, title: null, creator: username, modifier: username, chooseContent: {"priority":[],"resource":[]}, description: null, expectEndTime: null, expectStartTime: null, owner: null, executors: null}
+const defaultForm = { id: null, caseId: null, title: null, creator: username, modifier: username, chooseContent: { 'priority': [],'resource': []}, description: null, expectEndTime: null, expectStartTime: null, owner: null, executors: null}
 export default {
   name: 'Task',
   components: { Treeselect, pagination, crudOperation, rrOperation, DateRangePicker },
@@ -320,6 +320,7 @@ export default {
         })
         this.prioritys = val.toString()
         this.radioBtnStatus = false
+        this.selectCaseCount = 0
         cases.countByCondition(params).then(res => {
           if (res.code === 200) {
             this.selectCaseCount = res.data.count
@@ -332,7 +333,7 @@ export default {
           this.form.chooseContent.priority = selectOption
         }
         if (this.means === 'edit') {
-          this.form.chooseContent.priority = selectOption
+          this.form.chooseContent = {'priority': selectOption, 'resource': this.formDate.resource}
         }
       }
     },
@@ -357,6 +358,7 @@ export default {
           selectReource.push(data)
         })
         this.radioBtnStatus = false
+        this.selectCaseCount = 0
         cases.countByCondition(params).then(res => {
           if (res.code === 200) {
             this.selectCaseCount = res.data.count
@@ -367,7 +369,7 @@ export default {
         })
         if (this.means === 'edit' && this.form.chooseContent) {
           console.log('selectReource=====' + selectReource)
-          this.form.chooseContent.resource = selectReource
+          this.form.chooseContent = this.form.chooseContent = {'priority': this.formDate.prioritylist, 'resource': selectReource }
         }
         if (this.means === 'add') {
           console.log('adddddd')
@@ -490,7 +492,6 @@ export default {
       let that = this
       that.formDate.prioritylist = []
       that.formDate.resource = []
-      that.selectCaseCount = 0
       that.resources = []
       const params = { caseId: id, priority: '', resource: '' }
       if (priority.length > 0 || resource.length > 0) {
@@ -515,6 +516,7 @@ export default {
         }
         console.log('自动圈选======' + that.form.chooseContent)
       }else {
+        that.selectCaseCount = 0
         that.radioBtnStatus = false
         that.formDate.content = true
         that.formDate.resource = false
@@ -522,6 +524,7 @@ export default {
       cases.countByCondition(params).then(res => {
         if (res.code === 200) {
           that.caseCount = res.data.totalCount
+          this.selectCaseCount = res.data.count
         }
       }).catch(error => {
         reject(error)
