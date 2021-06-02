@@ -47,7 +47,7 @@
               <el-input v-model="form.owner" placeholder="请输入任务负责人" style="width: 220px;" />
             </el-form-item>
             <el-form-item label="计划周期" prop="StartTime">
-              <date-range-picker v-model="formDate.expectTime" @change="dateConvert" range-separator="至" class="date-item" style="width: 556px;"/>
+              <date-range-picker v-model="formDate.expectTime" value-format="yyyy-MM-dd" @change="dateConvert" range-separator="至" class="date-item" style="width: 556px;"/>
 <!--              <el-date-picker-->
 <!--                v-model="formDate.StartTime"-->
 <!--                type="date"-->
@@ -381,8 +381,6 @@ export default {
         this.radioBtnStatus = true
         this.formDate.content = ''
         this.formDate.expectTime = ''
-        // this.formDate.StartTime = ''
-        // this.formDate.EndTime = ''
         this.formDate.prioritylist = ''
         this.formDate.resource = ''
         this.getCases()
