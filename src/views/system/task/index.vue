@@ -161,7 +161,6 @@
 import crudTask from '@/api/system/task'
 import cases, { queryList, getCaseInfo } from '@/api/system/case'
 import CRUD, { presenter, header, form, crud, caseCount } from '@crud/crudCase'
-import crudCommon from '@/mixins/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operationXmind'
 import pagination from '@crud/Pagination'

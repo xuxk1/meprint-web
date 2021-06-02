@@ -92,13 +92,13 @@ function CRUD(options) {
     },
     page: {
       // 页码
-      page: 0,
+      pageNum: 1,
       // 每页数据条数
-      size: 10,
+      pageSize: 10,
       // 总数据条数
       total: 0
     },
-    id: 0,
+    caseId: 0,
     // 整体loading
     loading: false,
     // 导出的 Loading
@@ -124,7 +124,7 @@ function CRUD(options) {
     },
     // 搜索
     toQuery() {
-      crud.page.page = 1
+      crud.page.pageNum = 1
       crud.refresh()
     },
     // 刷新
@@ -365,29 +365,29 @@ function CRUD(options) {
         if (crud.params[item] === null || crud.params[item] === '') crud.params[item] = undefined
       })
       return {
-        page: crud.page.page - 1,
-        size: crud.page.size,
+        pageNum: crud.page.pageNum,
+        pageSize: crud.page.pageSize,
         sort: crud.sort,
-        id: crud.caseId,
+        caseId: crud.caseId,
         ...crud.query,
         ...crud.params
       }
     },
     // 当前页改变
     pageChangeHandler(e) {
-      crud.page.page = e
+      crud.page.pageNum = e
       crud.refresh()
     },
     // 每页条数改变
     sizeChangeHandler(e) {
-      crud.page.size = e
-      crud.page.page = 1
+      crud.page.pageSize = e
+      crud.page.pageNum = 1
       crud.refresh()
     },
     // 预防删除第二页最后一条数据时，或者多选删除第二页的数据时，页码错误导致请求无数据
     dleChangePage(size) {
-      if (crud.data.length === size && crud.page.page !== 1) {
-        crud.page.page -= 1
+      if (crud.data.length === size && crud.page.pageNum !== 1) {
+        crud.page.pageNum -= 1
       }
     },
     // 选择改变
