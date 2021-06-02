@@ -46,26 +46,26 @@
             <el-form-item label="任务负责人" prop="owner">
               <el-input v-model="form.owner" placeholder="请输入任务负责人" style="width: 220px;" />
             </el-form-item>
-            <el-form-item label="开始时间" prop="StartTime">
-              <!--          <date-range-picker v-model="form.createTime" class="date-item" style="width: 556px;"/>-->
-              <el-date-picker
-                v-model="formDate.StartTime"
-                type="date"
-                placeholder="选择日期"
-                value-format="yyyy-MM-dd"
-                :clearable="false"
-                @change="startDateConvert"
-              ></el-date-picker>
-            </el-form-item>
-            <el-form-item label="结束时间" prop="EndTime">
-              <el-date-picker
-                v-model="formDate.EndTime"
-                type="date"
-                placeholder="选择日期"
-                value-format="yyyy-MM-dd"
-                :clearable="false"
-                @change="endDateConvert"
-              ></el-date-picker>
+            <el-form-item label="计划周期" prop="StartTime">
+              <date-range-picker v-model="formDate.expectTime" @change="dateConvert" range-separator="至" class="date-item" style="width: 556px;"/>
+<!--              <el-date-picker-->
+<!--                v-model="formDate.StartTime"-->
+<!--                type="date"-->
+<!--                placeholder="选择日期"-->
+<!--                value-format="yyyy-MM-dd"-->
+<!--                :clearable="false"-->
+<!--                @change="startDateConvert"-->
+<!--              ></el-date-picker>-->
+<!--            </el-form-item>-->
+<!--            <el-form-item label="结束时间" prop="EndTime">-->
+<!--              <el-date-picker-->
+<!--                v-model="formDate.EndTime"-->
+<!--                type="date"-->
+<!--                placeholder="选择日期"-->
+<!--                value-format="yyyy-MM-dd"-->
+<!--                :clearable="false"-->
+<!--                @change="endDateConvert"-->
+<!--              ></el-date-picker>-->
             </el-form-item>
             <el-form-item label="用例集分类" prop="caseId">
               <el-select v-model="form.caseId" placeholder="请选择用例集" size="small" @change="selectCases(form.caseId)" style="width: 220px">
@@ -182,6 +182,7 @@ export default {
     return {
       delLoading: false,
       formDate: {
+        expectTime: null,
         StartTime: null,
         EndTime: null,
         content: null,
@@ -265,11 +266,16 @@ export default {
       console.log('bizId~~~~~~~' + value)
       this.caseId = Number(value)
     },
-    startDateConvert(time) {
+    dateConvert(time) {
       let that = this
-      const startTime = time +  ' 00:00:00'
+      // const startTime = time +  ' 00:00:00'
+      const startTime = time.toString().split(',')[0]
+      const endTime = time.toString().split(',')[1]
+      console.log('startTime======' + startTime + '\n' + 'endTime======' + endTime)
       const getStartTime = new Date(startTime)
+      const getEndTime = new Date(endTime)
       that.form.expectStartTime = getStartTime.valueOf()
+      that.form.expectEndTime = getEndTime.valueOf()
     },
     endDateConvert(time) {
       let that = this
@@ -284,7 +290,7 @@ export default {
       that.formDate.resource = []
       that.selectCaseCount = 0
       that.btnStatus=(val===true)?true:false
-      this.form.chooseContent = {"priority":[],"resource":[]}
+      this.form.chooseContent = {'priority':[],'resource':[]}
 
       cases.countByCondition({caseId: caseId, priority: '', resource: ''}).then(res => {
         if (res.code === 200 && res.data.taglist) {
@@ -374,15 +380,18 @@ export default {
       if (form.caseId == null && form.id === null) {
         this.radioBtnStatus = true
         this.formDate.content = ''
-        this.formDate.StartTime = ''
-        this.formDate.EndTime = ''
+        this.formDate.expectTime = ''
+        // this.formDate.StartTime = ''
+        // this.formDate.EndTime = ''
         this.formDate.prioritylist = ''
         this.formDate.resource = ''
         this.getCases()
       } else if (form.caseId !== null && form.id !==null) {
         this.getSupCases(form.caseId)
-        this.formDate.StartTime = form.expectStartTime
-        this.formDate.EndTime = form.expectEndTime
+        //第一种赋值方式
+        this.formDate.expectTime = [form.expectStartTime.split(' ')[0] , form.expectEndTime.split(' ')[0]]
+        //第二种赋值方式
+        // this.$set(this.formDate, 'expectTime', [form.expectStartTime.split(' ')[0] , form.expectEndTime.split(' ')[0]])
         const prioritylist = JSON.parse(form.chooseContent).priority
         const resource = JSON.parse(form.chooseContent).resource
         console.log('formId=====' + form.id)
@@ -421,6 +430,8 @@ export default {
     getCaseDatas(node, resolve) {
       const sort = 'id,desc'
       const params = {
+        pageNum: 1,
+        pageSize: 10,
         sort: sort,
         productLineId: 1,
         channel: 1,
@@ -447,7 +458,11 @@ export default {
       }, 100)
     },
     getCases() {
+      const sort = 'id,desc'
       const params = {
+        pageNum: 1,
+        pageSize: 10,
+        sort: sort,
         productLineId: 1,
         channel: 1,
         bizId: -1
