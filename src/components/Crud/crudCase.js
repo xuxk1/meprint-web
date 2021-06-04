@@ -98,7 +98,6 @@ function CRUD(options) {
       // 总数据条数
       total: 0
     },
-    caseId: 0,
     // 整体loading
     loading: false,
     // 导出的 Loading
@@ -145,8 +144,8 @@ function CRUD(options) {
             crud.page.total = data.total
             crud.data = data.dataSources
           }else if (crud.title === '测试任务') {
-            crud.page.total = data.data.length
-            crud.data = data.data
+            crud.page.total = data.data.total
+            crud.data = data.data.dataSources
           }
 
           if (crud.page.total > 0) {
@@ -368,7 +367,6 @@ function CRUD(options) {
         pageNum: crud.page.pageNum,
         pageSize: crud.page.pageSize,
         sort: crud.sort,
-        caseId: crud.caseId,
         ...crud.query,
         ...crud.params
       }
