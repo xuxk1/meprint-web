@@ -133,7 +133,7 @@
           <el-table-column v-if="checkPer(['admin','task:edit','task:del'])" label="操作" width="170px" align="center" fixed="right">
             <template slot-scope="scope">
               <el-button v-permission="['admin','task:edit']" size="mini" style="margin-right: 3px;" type="text" @click="crud.toEdit(scope.row)">编辑</el-button>
-              <el-button v-permission="['admin','task:edit']" style="margin-left: -2px" type="text" size="mini" @click="execute(scope.row.id)">执行</el-button>
+              <el-button v-permission="['admin','task:edit']" style="margin-left: -2px" type="text" size="mini" @click="execute(scope.row.caseId, scope.row.id)">执行</el-button>
               <el-popover
                 :ref="scope.row.id"
                 v-permission="['admin','task:del']"
@@ -236,12 +236,16 @@ export default {
   },
   methods: {
     // 执行
-    execute(id) {
-      crudTask.execution(id).then(res => {
-        this.crud.notify('执行成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+    execute(caseId,taskId) {
+      crudTask.execution(taskId).then(res => {
+        if (res.code === 200) {
+          this.crud.notify('执行成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+        }
       }).catch(err => {
-        console.log(err.response.data.message)
+        this.crud.notify('执行失败', CRUD.NOTIFICATION_TYPE.ERROR)
+        console.log(err)
       })
+      this.$router.push({ path: '/system/task/task', query: { caseId: caseId, taskId: taskId, iscore: 3}})
     },
     updateParams(id) {
       console.log(id)
@@ -392,8 +396,6 @@ export default {
         // this.$set(this.formDate, 'expectTime', [form.expectStartTime.split(' ')[0] , form.expectEndTime.split(' ')[0]])
         const prioritylist = JSON.parse(form.chooseContent).priority
         const resource = JSON.parse(form.chooseContent).resource
-        console.log('formId=====' + form.id)
-        console.log('prioritylist======' + prioritylist + '\n' + 'resource======' + resource)
         this.means = 'edit'
         this.editInit(form.caseId, prioritylist, resource)
       }
@@ -444,14 +446,14 @@ export default {
       }
       setTimeout(() => {
         queryList(params).then(res => {
-          if (resolve && res.dataSources.length > 1) {
-            resolve(res.dataSources)
+          if (resolve && res.data.total > 1) {
+            resolve(res.data.dataSources)
           }
           if (node.children && !node.children.length) {
             delete node.children
           }
           this.caseDatas = []
-          this.caseDatas = res.dataSources
+          this.caseDatas = res.data.dataSources
         })
       }, 100)
     },
@@ -466,7 +468,7 @@ export default {
         bizId: -1
       }
       queryList(params).then(res => {
-        this.Cases = res.dataSources.map(function(obj) {
+        this.Cases = res.data.dataSources.map(function(obj) {
           if (obj.title) {
             obj.title
           }

@@ -140,10 +140,7 @@ function CRUD(options) {
             table.store.states.treeData = {}
             table.store.states.lazyTreeNodeMap = {}
           }
-          if (crud.title === '用例管理') {
-            crud.page.total = data.total
-            crud.data = data.dataSources
-          }else if (crud.title === '测试任务') {
+          if (data.code === 200) {
             crud.page.total = data.data.total
             crud.data = data.data.dataSources
           }
