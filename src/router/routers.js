@@ -38,6 +38,13 @@ export const constantRouterMap = [
     // ]
   },
   {
+    path: '/system/task/task',
+    component: (resolve) => require(['@/views/components/TaskEditor'], resolve),
+    hidden: true,
+    name: 'TaskEditor',
+    meta: { title: '测试任务', noCache: true }
+  },
+  {
     path: '/redirect',
     component: Layout,
     hidden: true,
