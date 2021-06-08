@@ -272,10 +272,10 @@ export default {
     },
     dateConvert(time) {
       let that = this
-      // const startTime = time +  ' 00:00:00'
-      const startTime = time.toString().split(',')[0]
-      const endTime = time.toString().split(',')[1]
-      console.log('startTime======' + startTime + '\n' + 'endTime======' + endTime)
+      const start = time.toString().split(',')[0]
+      const end = time.toString().split(',')[1]
+      const startTime = start +  ' 00:00:00'
+      const endTime = end +  ' 23:59:59'
       const getStartTime = new Date(startTime)
       const getEndTime = new Date(endTime)
       that.form.expectStartTime = getStartTime.valueOf()
@@ -402,7 +402,6 @@ export default {
     },
     // 提交前做的操作
     [CRUD.HOOK.afterValidateCU](crud) {
-      console.log(crud.form.title)
       if (!crud.form.title) {
         this.$message({
           message: '任务名称不能为空',
