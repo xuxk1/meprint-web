@@ -196,7 +196,6 @@ export default {
         contentchange = JSON.parse(editXmindData)
         contentchange.base = 0
         resultData = contentchange
-        console.log('editXmindData========' + editXmindData)
         const messagejson = {
           'case': resultData,
           'patch': [

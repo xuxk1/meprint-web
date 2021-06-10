@@ -126,14 +126,34 @@
           <el-table-column :show-overflow-tooltip="true" prop="title" label="任务名称" />
           <el-table-column :show-overflow-tooltip="true" prop="owner" label="负责人" />
           <el-table-column :show-overflow-tooltip="true" prop="executors" label="执行人" />
-          <el-table-column :show-overflow-tooltip="true" prop="passRate" label="通过率" />
-          <el-table-column :show-overflow-tooltip="true" prop="executeNum" label="已测用例集" />
+          <el-table-column :show-overflow-tooltip="true" prop="passRate" label="通过率" >
+            <template slot-scope="scope">
+                <span style="margin-left: 10px">{{parseFloat((scope.row.executeNum/scope.row.totalNum)*100).toFixed(2)}}%</span>
+            </template>
+          </el-table-column>
+          <el-table-column :show-overflow-tooltip="true" prop="executeNum" label="已测用例集">
+            <template slot-scope="scope">
+              <span style="margin-left: 10px">{{scope.row.executeNum}}/{{scope.row.totalNum}}</span>
+            </template>
+          </el-table-column>
           <el-table-column :show-overflow-tooltip="true" prop="expectStartTime"  width="136px" value-format="YYYY-MM-DD" label="开始时间" />
           <el-table-column :show-overflow-tooltip="true" prop="expectEndTime"  width="136px" value-format="YYYY-MM-DD" label="结束时间" />
           <el-table-column v-if="checkPer(['admin','task:edit','task:del'])" label="操作" width="170px" align="center" fixed="right">
             <template slot-scope="scope">
               <el-button v-permission="['admin','task:edit']" size="mini" style="margin-right: 3px;" type="text" @click="crud.toEdit(scope.row)">编辑</el-button>
-              <el-button v-permission="['admin','task:edit']" style="margin-left: -2px" type="text" size="mini" @click="execute(scope.row.caseId, scope.row.id)">执行</el-button>
+              <el-popover
+                :ref="scope.row.id"
+                v-permission="['admin','task:edit']"
+                placement="top"
+                width="200"
+              >
+                <p>确定执行该任务吗？</p>
+                <div style="text-align: right; margin: 0">
+                  <el-button size="mini" type="text" @click="$refs[scope.row.id].doClose()">取消</el-button>
+                  <el-button :loading="delLoading" type="primary" size="mini" @click="execute(scope.row.caseId, scope.row.id)">确定</el-button>
+                </div>
+                <el-button slot="reference" type="text" size="mini">执行</el-button>
+              </el-popover>
               <el-popover
                 :ref="scope.row.id"
                 v-permission="['admin','task:del']"
@@ -160,7 +180,7 @@
 <script>
 import crudTask from '@/api/system/task'
 import cases, { queryList, getCaseInfo } from '@/api/system/case'
-import CRUD, { presenter, header, form, crud, caseCount } from '@crud/crudCase'
+import CRUD, { presenter, header, form, crud } from '@crud/crudCase'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operationXmind'
 import pagination from '@crud/Pagination'
@@ -218,9 +238,9 @@ export default {
         ]
       },
       caseLevel: [
-        { key: 1, display_name: 'P0' },
-        { key: 2, display_name: 'P1' },
-        { key: 3, display_name: 'P2' },
+        { key: '1', display_name: 'P0' },
+        { key: '2', display_name: 'P1' },
+        { key: '3', display_name: 'P2' },
       ],
       radioBtnStatus :true,
       btnStatus: true
@@ -237,15 +257,16 @@ export default {
   methods: {
     // 执行
     execute(caseId,taskId) {
-      crudTask.execution(taskId).then(res => {
-        if (res.code === 200) {
-          this.crud.notify('执行成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
-        }
-      }).catch(err => {
-        this.crud.notify('执行失败', CRUD.NOTIFICATION_TYPE.ERROR)
-        console.log(err)
-      })
+      // crudTask.execution(taskId).then(res => {
+      //   if (res.code === 200) {
+      //     this.crud.notify('执行成功', CRUD.NOTIFICATION_TYPE.SUCCESS)
+      //   }
+      // }).catch(err => {
+      //   this.crud.notify('执行失败', CRUD.NOTIFICATION_TYPE.ERROR)
+      //   console.log(err)
+      // })
       this.$router.push({ path: '/system/task/task', query: { caseId: caseId, taskId: taskId, iscore: 3}})
+      localStorage.setItem('taskId', taskId)
     },
     updateParams(id) {
       console.log(id)

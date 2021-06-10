@@ -104,7 +104,7 @@ export default {
     this.get_personaData(this.username)
   },
   methods: {
-    handleSetLineChartData: function(type) {
+    handleSetLineChartData(type) {
       // this.lineChartData = lineChartData[type]
       if (type !== undefined && type === 'task') this.filterUrl = this.personalFilterUrl
       if (type !== undefined && type === 'questions') this.filterUrl = this.bugFilterUrl

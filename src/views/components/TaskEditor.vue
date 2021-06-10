@@ -1,21 +1,21 @@
 <template>
   <div>
-    <header-menu/>
-    <task-editor ref="child"></task-editor>
+    <task-header-menu/>
+    <task-main-editor ref="child"></task-main-editor>
     <navigator/>
   </div>
 </template>
 
 <script>
-import headerMenu from '../../views/components/Header'
-import taskEditor from '../../views/components/main/taskEditor'
+import taskHeaderMenu from '../../views/components/TaskHeader'
+import taskMainEditor from './main/taskMainEditor'
 import navigator from '../../views/components/main/navigator'
 
 export default {
   name: 'TaskEditor',
   components: {
-    headerMenu,
-    taskEditor,
+    taskMainEditor,
+    taskHeaderMenu,
     navigator
   },
   methods: {
