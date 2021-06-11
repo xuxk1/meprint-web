@@ -30,8 +30,9 @@
         <div class="head-container">
           <div v-if="crud.props.searchToggle">
             <!-- 搜索 -->
-            <el-input v-model="query.id" clearable size="small" placeholder="输入内容模糊搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
-            <date-range-picker v-model="query.createTime" class="date-item" />
+            <el-input v-model="query.title" clearable size="small" placeholder="输入内容模糊搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+            <el-input v-model="query.owner" clearable size="small" placeholder="输入负责人搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+            <date-range-picker v-model="query.createTime" class="date-item" @change="onDateChange"/>
             <rrOperation />
           </div>
           <crudOperation show="" :permission="permission" >
@@ -156,7 +157,7 @@
               </el-popover>
               <el-popover
                 :ref="scope.row.id"
-                v-permission="['admin','task:del']"
+                v-permission="['admin','task:edit']"
                 placement="top"
                 width="200"
               >
@@ -255,6 +256,14 @@ export default {
     this.means = 'add'
   },
   methods: {
+    //转换时间返回查询参数
+    onDateChange(dateString) {
+      console.log(dateString[0])
+      console.log(dateString[1])
+      delete this.query.createTime
+      this.query.expectStartTime = dateString[0]
+      this.query.expectEndTime = dateString[1]
+    },
     // 执行
     execute(caseId,taskId) {
       // crudTask.execution(taskId).then(res => {

@@ -29,8 +29,8 @@
         <div class="head-container">
           <div v-if="crud.props.searchToggle">
             <!-- 搜索 -->
-            <el-input v-model="query.blurry" clearable size="small" placeholder="输入内容模糊搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
-            <date-range-picker v-model="query.createTime" class="date-item" />
+            <el-input v-model="query.title" clearable size="small" placeholder="输入内容模糊搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+            <el-input v-model="query.creator" clearable size="small" placeholder="输入创建者搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
             <rrOperation />
           </div>
           <crudOperationXmind show="" :permission="permission" />
