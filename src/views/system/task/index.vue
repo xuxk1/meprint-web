@@ -526,6 +526,7 @@ export default {
     },
     editInit(id, priority, resource) {
       let that = this
+      that.getCases()
       that.formDate.prioritylist = []
       that.formDate.resource = []
       that.resources = []
