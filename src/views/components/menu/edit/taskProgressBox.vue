@@ -49,6 +49,7 @@
     created() {},
     methods: {
       execCommand(index) {
+        // minder.execCommand('Image', '', '移除图片');
         this.commandDisabled || this.minder.execCommand('progress', index)
       },
     classArray(index) {

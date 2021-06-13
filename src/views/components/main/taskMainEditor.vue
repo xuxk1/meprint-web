@@ -167,7 +167,7 @@ export default {
         e.returnValue = "您是否确认离开此页面-您输入的数据可能不会被保存"
         this.ws.close()
       }
-      return "您是否确认离开此页面-您输入的数据可能不会被保存";
+      return e.returnValue
       //重连
       // this.reconnect()
     },
@@ -183,30 +183,26 @@ export default {
     naotu(ws, data) {
       const Editor = require('../../../script/editor')
       const el = this.$el
-      const editor = (window.XmindEditor = new Editor(el))
+      const editor = (window.taskeditor = new Editor(el))
       var editXmindData = ''
       let contentchange = ''
       const messageType = 1
-      this.setEditor(editor)
       if (data) {
         editor.minder.importJson(data)
+      }else {
+        return this.setEditor(editor.minder)
       }
       editor.minder.on('contentchange', () => {
+        const patch = window.diff(editor.minder.exportJson(),data)
         editXmindData = JSON.stringify(editor.minder.exportJson())
         contentchange = JSON.parse(editXmindData)
         contentchange.base = 0
         resultData = contentchange
-        const messagejson = {
+        const messageJson = {
           'case': resultData,
-          'patch': [
-            [{
-              'op': 'replace',
-              'path': contentchange.path,
-              'value': contentchange.root.data.text
-            }]
-          ]
+          'patch': [patch[0]]
         }
-        const message = JSON.stringify(messagejson).replace(/\\/g, '')
+        const message = JSON.stringify(messageJson).replace(/\\/g, '')
         console.log('message====' + message)
         ws.send(messageType + message)
       })

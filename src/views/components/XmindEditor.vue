@@ -12,7 +12,7 @@ import mainEditor from '../../views/components/main/mainEditor'
 import navigator from '../../views/components/main/navigator'
 
 export default {
-  name: 'XmindEditor',
+  name: 'xmindeditor',
   components: {
     headerMenu,
     mainEditor,

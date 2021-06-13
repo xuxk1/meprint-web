@@ -12,7 +12,7 @@ import taskMainEditor from './main/taskMainEditor'
 import navigator from '../../views/components/main/navigator'
 
 export default {
-  name: 'TaskEditor',
+  name: 'taskeditor',
   components: {
     taskMainEditor,
     taskHeaderMenu,

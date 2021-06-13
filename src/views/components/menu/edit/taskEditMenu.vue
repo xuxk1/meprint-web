@@ -88,7 +88,6 @@ export default {
           this.totalCount = res.data.totalCount
           this.expectStartTime = res.data.expectStartTime
           this.expectEndTime = res.data.expectEndTime
-          console.log('this.expectEndTime=======' + this.expectEndTime)
         }
       }).catch(err => {
         console.log(err)

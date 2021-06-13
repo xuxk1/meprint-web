@@ -26,7 +26,7 @@ export const constantRouterMap = [
     // component: Layout,
     hidden: true,
     // redirect: '/system/case/xmind',
-    name: 'XmindEditor',
+    name: 'xmindeditor',
     meta: { title: '脑图', noCache: true }
     // children: [
     //   {
@@ -41,7 +41,7 @@ export const constantRouterMap = [
     path: '/system/task/task',
     component: (resolve) => require(['@/views/components/TaskEditor'], resolve),
     hidden: true,
-    name: 'TaskEditor',
+    name: 'taskeditor',
     meta: { title: '测试任务', noCache: true }
   },
   {
