@@ -143,14 +143,14 @@
             <template slot-scope="scope">
               <el-button v-permission="['admin','task:edit']" size="mini" style="margin-right: 3px;" type="text" @click="crud.toEdit(scope.row)">编辑</el-button>
               <el-popover
-                :ref="scope.$index"
+                :ref="`popover-${scope.$index}`"
                 v-permission="['admin','task:edit']"
                 placement="top"
                 width="200"
               >
                 <p>确定执行该任务吗？</p>
                 <div style="text-align: right; margin: 0">
-                  <el-button size="mini" type="text" @click="$refs[scope.$index].doClose()">取消</el-button>
+                  <el-button size="mini" type="text" @click="$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
                   <el-button :loading="editLoading" type="primary" size="mini" @click="execute(scope.row.caseId, scope.row.id)">确定</el-button>
                 </div>
                 <el-button slot="reference" type="text" size="mini">执行</el-button>
