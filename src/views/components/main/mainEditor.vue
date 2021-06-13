@@ -178,55 +178,6 @@ export default {
       //数据发送
       this.ws.send(msg)
     },
-    // getWebsocketData(){
-    //   let res = ''
-    //   let act = ''
-    //   let iscore = 0
-    //   let readOnly = false;
-    //   let progressShow = false;
-    //   if (iscore === '0' || iscore === '1') {
-    //     readOnly = false;
-    //     progressShow = false;
-    //   } else {
-    //     readOnly = true;
-    //     progressShow = true;
-    //   }
-    //   let connection = new WebSocket(this.wsUrl)
-    //   connection.onopen = () => {
-    //     console.log('webSocket已连接')
-    //   }
-    //   connection.onmessage = (event) => {
-    //     console.log('webSocket连接正常')
-    //     res = event.data
-    //     if (res){
-    //       if (res && res.hasOwnProperty('当前用户数') !=-1) {
-    //         try{
-    //           act = JSON.parse(res)
-    //           if (act.hasOwnProperty('template')) {
-    //             console.log('template======' + res)
-    //             this.naotu(connection,act)
-    //           }
-    //         }catch (e) {
-    //           if(e instanceof SyntaxError){
-    //             console.log("handle this expected error")
-    //           }else if(e instanceof TypeError){
-    //             console.log("handle unexpected error")
-    //           }
-    //         }finally {
-    //           console.log("finally_statements")
-    //         }
-    //       }
-    //     }else {
-    //       this.naotu()
-    //     }
-    //   }
-    //   connection.onerror = () => {
-    //     console.log('webSocket连接出错')
-    //   }
-    //   connection.onclose = () => {
-    //     console.log('webSocket连接关闭')
-    //   }
-    // },
     naotu(ws, data) {
       const Editor = require('../../../script/editor')
       const el = this.$el
