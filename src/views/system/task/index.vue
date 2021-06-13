@@ -143,21 +143,21 @@
             <template slot-scope="scope">
               <el-button v-permission="['admin','task:edit']" size="mini" style="margin-right: 3px;" type="text" @click="crud.toEdit(scope.row)">编辑</el-button>
               <el-popover
-                :ref="scope.row.id"
+                :ref="scope.$index"
                 v-permission="['admin','task:edit']"
                 placement="top"
                 width="200"
               >
                 <p>确定执行该任务吗？</p>
                 <div style="text-align: right; margin: 0">
-                  <el-button size="mini" type="text" @click="$refs[scope.row.id].doClose()">取消</el-button>
-                  <el-button :loading="delLoading" type="primary" size="mini" @click="execute(scope.row.caseId, scope.row.id)">确定</el-button>
+                  <el-button size="mini" type="text" @click="$refs[scope.$index].doClose()">取消</el-button>
+                  <el-button :loading="editLoading" type="primary" size="mini" @click="execute(scope.row.caseId, scope.row.id)">确定</el-button>
                 </div>
                 <el-button slot="reference" type="text" size="mini">执行</el-button>
               </el-popover>
               <el-popover
                 :ref="scope.row.id"
-                v-permission="['admin','task:edit']"
+                v-permission="['admin','task:del']"
                 placement="top"
                 width="200"
               >
@@ -201,6 +201,7 @@ export default {
   mixins: [presenter(), header(), form(defaultForm), crud()],
   data() {
     return {
+      editLoading: false,
       delLoading: false,
       formDate: {
         expectTime: null,
@@ -274,8 +275,10 @@ export default {
       //   this.crud.notify('执行失败', CRUD.NOTIFICATION_TYPE.ERROR)
       //   console.log(err)
       // })
+      this.editLoading = true
       this.$router.push({ path: '/system/task/task', query: { caseId: caseId, taskId: taskId, iscore: 3}})
       localStorage.setItem('taskId', taskId)
+      this.editLoading = false
     },
     updateParams(id) {
       console.log(id)
