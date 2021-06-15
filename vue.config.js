@@ -40,7 +40,10 @@ module.exports = {
           '^/auth': 'auth'
         }
       }
-    }
+    },
+    historyApiFallback: true,
+    watchOptions: { aggregateTimeout: 300, poll: 1000 },
+    disableHostCheck: true,
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that

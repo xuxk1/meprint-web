@@ -5,7 +5,7 @@
   "author": "Xiao kui",
   "license": "Apache-2.0",
   "scripts": {
-    "dev": "vue-cli-service serve",
+    "dev": "vue-cli-service serve --host=qa.diy8.com",
     "build:prod": "vue-cli-service build",
     "build:stage": "vue-cli-service build --modulesde staging",
     "preview": "node build/index.js --preview",
