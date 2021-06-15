@@ -6,6 +6,7 @@ const user = {
     token: getToken(),
     user: {},
     roles: [],
+    buttons: [],
     // 第一次加载菜单时用到
     loadMenus: false
   },
@@ -22,6 +23,9 @@ const user = {
     },
     SET_LOAD_MENUS: (state, loadMenus) => {
       state.loadMenus = loadMenus
+    },
+    SET_BUTTONS: (state, buttons) => {
+      state.buttons = buttons
     }
   },
 
@@ -78,10 +82,22 @@ const user = {
 export const logOut = (commit) => {
   commit('SET_TOKEN', '')
   commit('SET_ROLES', [])
+  commit('SET_BUTTONS', [])
   removeToken()
 }
 
 export const setUserInfo = (res, commit) => {
+  const buttonAuthList = []
+  console.log(res)
+  // if (res.buttons.length > 0) {
+  //   buttons.forEach(button => {
+  //     if (button.perms) {
+  //       buttonAuthList.push(button.perms)
+  //     }
+  //   })
+  //   commit('SET_BUTTONS', buttonAuthList)
+  // }
+  console.log('登录～～～～～～～～～～～～～2')
   // 如果没有任何权限，则赋予一个默认的权限，避免请求死循环
   if (res.roles.length === 0) {
     commit('SET_ROLES', ['ROLE_SYSTEM_DEFAULT'])

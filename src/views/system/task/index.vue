@@ -30,7 +30,7 @@
         <div class="head-container">
           <div v-if="crud.props.searchToggle">
             <!-- 搜索 -->
-            <el-input v-model="query.title" clearable size="small" placeholder="输入内容模糊搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+            <el-input v-model="query.title" clearable size="small" placeholder="输入任务名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
             <el-input v-model="query.owner" clearable size="small" placeholder="输入负责人搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
             <date-range-picker v-model="query.createTime" class="date-item" @change="onDateChange"/>
             <rrOperation />
@@ -196,7 +196,10 @@ export default {
   name: 'Task',
   components: { Treeselect, pagination, crudOperation, rrOperation, DateRangePicker },
   cruds() {
-    return CRUD({ title: '测试任务', url: 'api/record/alllist', crudMethod: { ...crudTask }})
+    const params = {
+      'userName': username
+    }
+    return CRUD({ title: '测试任务', url: 'api/record/alllist', params,  crudMethod: { ...crudTask }})
   },
   mixins: [presenter(), header(), form(defaultForm), crud()],
   data() {

@@ -15,6 +15,7 @@ import dict from './components/Dict'
 // 权限指令
 import checkPer from '@/utils/permission'
 import permission from './components/Permission'
+import {hasBtnPermission} from '@/utils/permission'
 import './assets/styles/element-variables.scss'
 // global css
 import './assets/styles/index.scss'
@@ -37,22 +38,6 @@ import kityMinder from 'vue-kityminder-editor'
 import jq from 'jquery'
 import axios from 'axios'
 
-require('../node_modules/codemirror/lib/codemirror.js')
-require('../node_modules/codemirror/mode/xml/xml.js')
-require('../node_modules/codemirror/mode/javascript/javascript.js')
-require('../node_modules/codemirror/mode/css/css.js')
-require('../node_modules/codemirror/mode/htmlmixed/htmlmixed.js')
-require('../node_modules/codemirror/mode/markdown/markdown.js')
-require('../node_modules/codemirror/addon/mode/overlay.js')
-require('../node_modules/codemirror/mode/gfm/gfm.js')
-require('../node_modules/marked/lib/marked.js')
-require('../node_modules/jquery/src/jquery.js')
-require('../node_modules/kity/dist/kity.js')
-require('../node_modules/hotbox/hotbox.js')
-require('../node_modules/kityminder-core/dist/kityminder.core.js')
-require('../node_modules/kityminder-core/src/core/patch.js')
-require('./script/expose-editor.js')
-
 window.$ = jq
 Vue.prototype.$axios = axios
 
@@ -69,6 +54,7 @@ Vue.use(Element, {
 })
 
 Vue.config.productionTip = false
+Vue.prototype.hasPerm = hasBtnPermission
 
 new Vue({
   el: '#app',
