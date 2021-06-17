@@ -27,6 +27,9 @@
   <div class='box-a box-b'>
     <el-button type="primary" @click="save" size="medium">保存</el-button>
   </div>
+  <div class='box-a box-b'>
+    <el-button type="primary" @click="$router.back()" size="medium">返回上一页</el-button>
+  </div>
 </div>
 </template>
 
