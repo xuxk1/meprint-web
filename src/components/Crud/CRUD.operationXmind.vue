@@ -41,7 +41,7 @@
         删除
       </el-button>
       <el-button
-        v-if="crud.optShow.download"
+        v-if="crud.title === '用例管理' ? crud.optShow.download : crud.optShow.download=false"
         :loading="crud.downloadLoading"
         class="filter-item"
         size="mini"
