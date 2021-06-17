@@ -116,7 +116,7 @@
           <el-table-column :selectable="checkboxT" type="selection" width="55" />
           <el-table-column :show-overflow-tooltip="true" prop="id" label="序号" />
           <el-table-column :show-overflow-tooltip="true" prop="groupId" label="用例集ID" />
-          <el-table-column :show-overflow-tooltip="true" prop="title" label="用例集名称">
+          <el-table-column :show-overflow-tooltip="true" prop="title" width="225" label="用例集名称">
             <template slot-scope="scope">
               <el-link @click="getCaseInfo(scope.row.id)"><font color="#1890ff">{{ scope.row.title }}</font></el-link>
             </template>
