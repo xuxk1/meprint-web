@@ -129,7 +129,7 @@
           <el-table-column :show-overflow-tooltip="true" prop="executors" label="执行人" />
           <el-table-column :show-overflow-tooltip="true" prop="passRate" label="通过率" >
             <template slot-scope="scope">
-                <span style="margin-left: 10px">{{parseFloat((scope.row.executeNum/scope.row.totalNum)*100).toFixed(2)}}%</span>
+                <span style="margin-left: 10px">{{parseFloat((scope.row.successNum/scope.row.totalNum)*100).toFixed(2)}}%</span>
             </template>
           </el-table-column>
           <el-table-column :show-overflow-tooltip="true" prop="executeNum" label="已测用例集">
