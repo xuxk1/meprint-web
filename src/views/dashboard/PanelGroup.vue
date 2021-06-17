@@ -114,7 +114,7 @@ export default {
       return new Promise((resolve, reject) => {
         getJiraData().then(response => {
           console.log(response)
-          this.endVal = Number(response.repaired.issueCount)
+          this.endVal = Number(response.personal.issueCount)
           this.productCount = Number(response.product.issueCount)
           this.projectCount = Number(response.project.projectCount)
           for (var j = 0; j < response.product.taskCount.length; j++) {
