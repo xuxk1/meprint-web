@@ -124,7 +124,7 @@
             </template>
           </el-table-column>
           <el-table-column :show-overflow-tooltip="true" prop="id" label="任务ID" />
-          <el-table-column :show-overflow-tooltip="true" prop="title" width="225" label="任务名称" />
+          <el-table-column :show-overflow-tooltip="true" prop="title" width="200" label="任务名称" />
           <el-table-column :show-overflow-tooltip="true" prop="owner" label="负责人" />
           <el-table-column :show-overflow-tooltip="true" prop="executors" label="执行人" />
           <el-table-column :show-overflow-tooltip="true" prop="passRate" label="通过率" >
