@@ -6,7 +6,7 @@
   <edit-del></edit-del>
   <attachment></attachment>
   <sequence-box></sequence-box>
-  <progress-box></progress-box>
+<!--  <progress-box></progress-box>-->
   <custom-box></custom-box>
    <expand></expand>
   <selection></selection>
@@ -16,7 +16,7 @@
   <div class='menu-button'>
     <el-button type="primary" @click="save" size="medium">保存</el-button>
   </div>
-  <div class='box-a box-b'>
+  <div class='menu-button'>
     <el-button type="primary" @click="$router.back()" size="medium">返回上一页</el-button>
   </div>
 </div>
@@ -63,10 +63,10 @@ export default {
       let messgeUnlock = 'unlock'
       if (val === true) {
         this.$parent.sendMessage(this.messageType + messgeUnlock)
-        this.$notify.success('解�成功')
+        this.$notify.success('解锁成功')
       }else {
         this.$parent.sendMessage(this.messageType + messageLock)
-        this.$notify.success('上�成功')
+        this.$notify.success('上锁成功')
       }
     }
 	}

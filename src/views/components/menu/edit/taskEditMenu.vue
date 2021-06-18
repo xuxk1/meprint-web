@@ -13,7 +13,7 @@
   </span>
   <span style="margin:0 10px">
     <p class="font-size-12">
-      已测： {{passCount ? passCount : 0}}/{{totalCount ? totalCount :0}}
+      已测： {{passCount ? passCount : 0}}/{{totalCount ? totalCount : 0}}
     </p>
   </span>
   <span style="margin:0 10px">
@@ -77,10 +77,10 @@ export default {
       let messgeUnlock = 'unlock'
       if (val === true) {
         this.$parent.sendMessage(this.messageType + messgeUnlock)
-        this.$notify.success('解🔒成功')
+        this.$notify.success('解锁成功')
       }else {
         this.$parent.sendMessage(this.messageType + messageLock)
-        this.$notify.success('上🔒成功')
+        this.$notify.success('上锁成功')
       }
     },
     getTaskData(taskId) {
@@ -105,5 +105,5 @@ export default {
     margin: 0 10px;
     text-align:center;line-height:60px;
   }
-  .box-a,.box-b{width:200px; margin: 0 10px;}
+  .box-a,.box-b{width:100px; margin: 0 10px;}
 </style>
