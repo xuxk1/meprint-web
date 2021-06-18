@@ -24,10 +24,10 @@
   <div class="box-a box-b">
     <switchLock v-model="value" text="on|off" @change="sendMessage"></switchLock>
   </div>
-  <div class='box-a box-b'>
-    <el-button type="primary" @click="save" size="medium">保存</el-button>
+  <div class='menu-button' v-if="checkPer(['admin','case:update'])">
+    <el-button v-permission="['admin','case:update']" type="primary" @click="save" size="medium">保存</el-button>
   </div>
-  <div class='box-a box-b'>
+  <div class='menu-button'>
     <el-button type="primary" @click="$router.back()" size="medium">返回上一页</el-button>
   </div>
 </div>
@@ -61,7 +61,10 @@ export default {
       passCount: '',
       totalCount: '',
       expectStartTime: '',
-      expectEndTime: ''
+      expectEndTime: '',
+      permission: {
+        add: ['admin', 'case:update'],
+      },
     }
   },
   created() {
@@ -105,5 +108,5 @@ export default {
     margin: 0 10px;
     text-align:center;line-height:60px;
   }
-  .box-a,.box-b{width:100px; margin: 0 10px;}
+  .box-a,.box-b{width:150px; margin: 0 10px;}
 </style>

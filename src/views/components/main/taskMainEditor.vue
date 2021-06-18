@@ -213,6 +213,7 @@ export default {
       const params = {
         id: this.caseId.toString(),
         title: this.title,
+        recordId: this.taskId.toString(),
         modifier: username,
         caseContent: resultData
       }
