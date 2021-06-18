@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-editor-container">
-      <github-corner class="github-corner" />
+<!--      <github-corner class="github-corner" />-->
       <!--:usernames="get_personaData"子组件给父组件传值，使用子组件panel-group-->
       <panel-group @handleSetLineChartData="handleSetLineChartData" />
 
@@ -21,7 +21,7 @@
         </el-col>
         <el-col :xs="24" :sm="24" :lg="8">
           <div class="chart-wrapper">
-            <bar-chart />
+            <pie-chart-o />
           </div>
         </el-col>
       </el-row>
@@ -33,7 +33,7 @@
         </el-col>
         <el-col :xs="24" :sm="24" :lg="8">
           <div class="chart-wrapper">
-            <pie-chart-o />
+            <bar-chart />
           </div>
         </el-col>
       </el-row>
