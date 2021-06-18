@@ -139,12 +139,12 @@
           </el-table-column>
           <el-table-column :show-overflow-tooltip="true" prop="expectStartTime"  width="136px" value-format="YYYY-MM-DD" label="开始时间" />
           <el-table-column :show-overflow-tooltip="true" prop="expectEndTime"  width="136px" value-format="YYYY-MM-DD" label="结束时间" />
-          <el-table-column v-if="checkPer(['admin','task:edit','task:del'])" label="操作" width="170px" align="center" fixed="right">
+          <el-table-column v-if="checkPer(['admin','task:edit','task:run','task:del'])" label="操作" width="170px" align="center" fixed="right">
             <template slot-scope="scope">
               <el-button v-permission="['admin','task:edit']" size="mini" style="margin-right: 3px;" type="text" @click="crud.toEdit(scope.row)">编辑</el-button>
               <el-popover
                 :ref="`popover-${scope.$index}`"
-                v-permission="['admin','task:edit']"
+                v-permission="['admin','task:run']"
                 placement="top"
                 width="200"
               >
@@ -226,6 +226,7 @@ export default {
       permission: {
         add: ['admin', 'task:add'],
         edit: ['admin', 'task:edit'],
+        run: ['admin', 'task:run'],
         del: ['admin', 'task:del']
       },
       rules: {
