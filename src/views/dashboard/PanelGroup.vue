@@ -81,6 +81,10 @@ export default {
     usernames: {
       type: Function,
       default: null
+    },
+    dashboardData:{
+      type: String,
+      default: '',
     }
   },
   data() {
@@ -93,6 +97,13 @@ export default {
       bugCount: Number
     }
   },
+  watch: {
+    dashboardData (u,o) {
+      this.username = localStorage.getItem('username')
+      this.get_bugdata(this.username,o)
+      this.get_bugdata(this.username,u)
+    }
+  },
   created() {
     this.endVal = 0
     this.productCount = 0
@@ -100,40 +111,64 @@ export default {
     this.taskCount = 0
     this.bugCount = 0
     this.username = localStorage.getItem('username')
-    this.get_bugdata(this.username)
+    this.get_bugdata(this.username,this.dashboardData)
   },
   methods: {
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', type)
     },
-    get_bugdata(username) {
+    get_bugdata(username,val) {
+    // 给子组件传值，配合:usernames="get_personaData"这个使用
+      // if (this.usernames){
+      //   this.usernames(this.username)
+      // }
+      let res = null
+      if (val !==null && val !=='' && val !==undefined) {
+        res = JSON.parse(val)
+        this.endVal = Number(res.personal.issueCount)
+        this.productCount = Number(res.product.issueCount)
+        this.projectCount = Number(res.project.projectCount)
+        for (var j = 0; j < res.product.taskCount.length; j++) {
+          if (username !== undefined && username === res.product.userNames[j]) {
+            this.taskCount = res.product.taskCount[j]
+            break
+          }
+        }
+        for (var k = 0; k < res.repaired.taskCount.length; k++) {
+          if (username !== undefined && username === res.repaired.userNames[k]) {
+            this.bugCount = res.repaired.taskCount[k]
+            break
+          }
+        }
+      }
+
       // 给子组件传值，配合:usernames="get_personaData"这个使用
       // if (this.usernames){
       //   this.usernames(this.username)
       // }
-      return new Promise((resolve, reject) => {
-        getJiraData().then(response => {
-          console.log(response)
-          this.endVal = Number(response.personal.issueCount)
-          this.productCount = Number(response.product.issueCount)
-          this.projectCount = Number(response.project.projectCount)
-          for (var j = 0; j < response.product.taskCount.length; j++) {
-            if (username !== undefined && username === response.product.userNames[j]) {
-              this.taskCount = response.product.taskCount[j]
-              break
-            }
-          }
-          for (var k = 0; k < response.repaired.taskCount.length; k++) {
-            if (username !== undefined && username === response.repaired.userNames[k]) {
-              this.bugCount = response.repaired.taskCount[k]
-              break
-            }
-          }
-        }).catch(error => {
-          reject(error)
-          this.$notify.error('接口相应超时')
-        })
-      })
+      // return new Promise((resolve, reject) => {
+      //   getJiraData().then(response => {
+      //     console.log(response)
+      //     this.endVal = Number(response.personal.issueCount)
+      //     this.productCount = Number(response.product.issueCount)
+      //     this.projectCount = Number(response.project.projectCount)
+      //     for (var j = 0; j < response.product.taskCount.length; j++) {
+      //       if (username !== undefined && username === response.product.userNames[j]) {
+      //         this.taskCount = response.product.taskCount[j]
+      //         break
+      //       }
+      //     }
+      //     for (var k = 0; k < response.repaired.taskCount.length; k++) {
+      //       if (username !== undefined && username === response.repaired.userNames[k]) {
+      //         this.bugCount = response.repaired.taskCount[k]
+      //         break
+      //       }
+      //     }
+      //   }).catch(error => {
+      //     reject(error)
+      //     this.$notify.error('接口相应超时')
+      //   })
+      // })
     }
   }
 }
