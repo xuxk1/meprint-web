@@ -83,7 +83,6 @@ export default {
             data: str
           }]
         })
-        console.log(str)
       }
       // return new Promise((resolve, reject) => {
       //   getJiraData().then(response => {
