@@ -22,7 +22,11 @@ export default {
       type: String,
       default: '520px'
     },
-    lists: JSON
+    lists: JSON,
+    dashboardData:{
+      type: String,
+      default: '',
+    }
   },
   data() {
     return {
@@ -30,12 +34,13 @@ export default {
     }
   },
   watch: {
-    lists: function() {
-      this.get_personaData()
+    dashboardData (u,o) {
+      this.get_personaData(o)
+      this.get_personaData(u)
     }
   },
   mounted() {
-    this.get_personaData()
+    this.get_personaData(this.dashboardData)
     this.__resizeHandler = debounce(() => {
       if (this.chart) {
         this.chart.resize()
@@ -52,49 +57,73 @@ export default {
     this.chart = null
   },
   methods: {
-    get_personaData() {
+    get_personaData(val) {
       let result
       var str = []
       this.$nextTick(() => {
         this.initChart()
       })
-      return new Promise((resolve, reject) => {
-        getJiraData().then(response => {
-          result = response.repaired
-          this.title = result.filterTitle
-          for (var j = 0; j < result.taskCount.length; j++) {
-            var str3 = {}
-            str3.name = result.userNames[j]
-            str3.value = result.taskCount[j]
-            str3.url = 'http://jira.diy8.com' + result.taskAddress[j]
-            str.push(str3)
-          }
-          this.chart.setOption({
-            legend: {
-              data: str.name
-            },
-            title: {
-              text: result.filterTitle,
-              subtext: '总数：' + result.issueCount
-            },
-            series: [{
-              name: result.filterTitle,
-              data: str
-            }]
-          })
-        }).catch(error => {
-          reject(error)
-          this.$notify.error('接口相应超时')
+      if (val !==null && val !=='' && val !==undefined) {
+        result = JSON.parse(val).repaired
+        this.title = result.filterTitle
+        for (var j = 0; j < result.taskCount.length; j++) {
+          var str3 = {}
+          str3.name = result.userNames[j]
+          str3.value = result.taskCount[j]
+          str3.url = 'http://jira.diy8.com' + result.taskAddress[j]
+          str.push(str3)
+        }
+        this.chart.setOption({
+          legend: {
+            data: str.name
+          },
+          title: {
+            text: result.filterTitle,
+            subtext: '总数：' + result.issueCount
+          },
+          series: [{
+            name: result.filterTitle,
+            data: str
+          }]
         })
-      })
+      }
+      // return new Promise((resolve, reject) => {
+      //   getJiraData().then(response => {
+      //     result = response.repaired
+      //     this.title = result.filterTitle
+      //     for (var j = 0; j < result.taskCount.length; j++) {
+      //       var str3 = {}
+      //       str3.name = result.userNames[j]
+      //       str3.value = result.taskCount[j]
+      //       str3.url = 'http://jira.diy8.com' + result.taskAddress[j]
+      //       str.push(str3)
+      //     }
+      //     this.chart.setOption({
+      //       legend: {
+      //         data: str.name
+      //       },
+      //       title: {
+      //         text: result.filterTitle,
+      //         subtext: '总数：' + result.issueCount
+      //       },
+      //       series: [{
+      //         name: result.filterTitle,
+      //         data: str
+      //       }]
+      //     })
+      //   }).catch(error => {
+      //     reject(error)
+      //     this.$notify.error('接口相应超时')
+      //   })
+      // })
     },
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
 
       this.chart.setOption({
         title: {
-          text: '',
-          subtext: '个人待办任务',
+          // text: '',
+          // subtext: '个人待办任务',
           left: 'center',
           textStyle: {
             fontSize: 16,
@@ -113,7 +142,7 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: []
+          // data: []
         },
         calculable: true,
         series: [
@@ -123,13 +152,13 @@ export default {
             roseType: 'radius',
             radius: [15, 120],
             center: ['50%', '50%'],
-            data: [
-              { value: 320, name: '王文' },
-              { value: 240, name: '周茉' },
-              { value: 149, name: '白文凯' },
-              { value: 100, name: '刘颖' },
-              { value: 59, name: '徐小魁' }
-            ],
+            // data: [
+            //   { value: 320, name: '王文' },
+            //   { value: 240, name: '周茉' },
+            //   { value: 149, name: '白文凯' },
+            //   { value: 100, name: '刘颖' },
+            //   { value: 59, name: '徐小魁' }
+            // ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600
           }

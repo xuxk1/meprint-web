@@ -24,7 +24,11 @@ export default {
       type: String,
       default: '520px'
     },
-    lists: JSON
+    lists: JSON,
+    dashboardData:{
+      type: String,
+      default: '',
+    }
   },
   data() {
     return {
@@ -32,12 +36,13 @@ export default {
     }
   },
   watch: {
-    lists: function() {
-      this.get_personaData()
+    dashboardData (u,o) {
+      this.get_personaData(o)
+      this.get_personaData(u)
     }
   },
   mounted() {
-    this.get_personaData()
+    this.get_personaData(this.dashboardData)
     this.__resizeHandler = debounce(() => {
       if (this.chart) {
         this.chart.resize()
@@ -54,44 +59,64 @@ export default {
     this.chart = null
   },
   methods: {
-    get_personaData: function() {
+    get_personaData (val) {
       let result
       var str = []
       this.$nextTick(function() {
         this.initChart()
       })
-      return new Promise((resolve, reject) => {
-        getJiraData().then(response => {
-          result = response.product
-          for (var j = 0; j < result.taskCount.length; j++) {
-            var str3 = {}
-            str3.name = result.userNames[j]
-            str3.value = result.taskCount[j]
-            str3.url = 'http://jira.diy8.com' + result.taskAddress[j]
-            str.push(str3)
-          }
-          this.chart.setOption({
-            title: {
-              text: result.filterTitle,
-              subtext: '总数：' + result.issueCount
-            },
-            series: [{
-              name: result.filterTitle,
-              data: str
-            }]
-          })
-        }).catch(error => {
-          reject(error)
-          this.$notify.error('接口相应超时')
+      if (val !==null && val !=='' && val !==undefined) {
+        result = JSON.parse(val).product
+        for (var j = 0; j < result.taskCount.length; j++) {
+          var str3 = {}
+          str3.name = result.userNames[j]
+          str3.value = result.taskCount[j]
+          str3.url = 'http://jira.diy8.com' + result.taskAddress[j]
+          str.push(str3)
+        }
+        this.chart.setOption({
+          title: {
+            text: result.filterTitle,
+            subtext: '总数：' + result.issueCount
+          },
+          series: [{
+            name: result.filterTitle,
+            data: str
+          }]
         })
-      })
+      }
+      // return new Promise((resolve, reject) => {
+      //   getJiraData().then(response => {
+      //     result = response.product
+      //     for (var j = 0; j < result.taskCount.length; j++) {
+      //       var str3 = {}
+      //       str3.name = result.userNames[j]
+      //       str3.value = result.taskCount[j]
+      //       str3.url = 'http://jira.diy8.com' + result.taskAddress[j]
+      //       str.push(str3)
+      //     }
+      //     this.chart.setOption({
+      //       title: {
+      //         text: result.filterTitle,
+      //         subtext: '总数：' + result.issueCount
+      //       },
+      //       series: [{
+      //         name: result.filterTitle,
+      //         data: str
+      //       }]
+      //     })
+      //   }).catch(error => {
+      //     reject(error)
+      //     this.$notify.error('接口相应超时')
+      //   })
+      // })
     },
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
       this.chart.setOption({
         title: {
-          text: '',
-          subtext: '个人待办任务',
+          // text: text'',
+          // subtext: '个人待办任务',
           left: 'center',
           textStyle: {
             fontSize: 16,
@@ -114,11 +139,11 @@ export default {
         },
         series: [
           {
-            name: '',
+            // name: '',
             type: 'pie',
             radius: '50%',
             center: ['50%', '50%'],
-            data: [],
+            // data: [],
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,

@@ -24,7 +24,11 @@ export default {
       type: String,
       default: '520px'
     },
-    list: JSON
+    list: JSON,
+    dashboardData:{
+      type: String,
+      default: '',
+    }
   },
   data() {
     return {
@@ -32,12 +36,13 @@ export default {
     }
   },
   watch: {
-    lists: function() {
-      this.get_personaData()
+    dashboardData (u,o) {
+      this.get_personaData(o)
+      this.get_personaData(u)
     }
   },
-  mounted() {
-    this.get_personaData()
+  created() {
+    this.get_personaData(this.dashboardData)
     this.__resizeHandler = debounce(() => {
       if (this.chart) {
         this.chart.resize()
@@ -54,44 +59,64 @@ export default {
     this.chart = null
   },
   methods: {
-    get_personaData() {
+    get_personaData(val) {
       let result
       var str = []
       this.$nextTick(() => {
         this.initChart()
       })
-      return new Promise((resolve, reject) => {
-        getJiraData().then(response => {
-          result = response.project
-          for (var j = 0; j < result.projectName.length; j++) {
-            var str3 = {}
-            str3.name = result.projectName[j]
-            str3.value = [j]
-            str.push(str3)
-          }
-          this.chart.setOption({
-            title: {
-              text: '项目分布',
-              subtext: '总数：' + result.projectCount
-            },
-            series: [{
-              name: '所有子项目分布',
-              data: str
-            }]
-          })
-        }).catch(error => {
-          reject(error)
-          this.$notify.error('接口相应超时')
+      if (val !==null && val !=='' && val !==undefined) {
+        result = JSON.parse(val).project
+        for (var j = 0; j < result.projectName.length; j++) {
+          var str3 = {}
+          str3.name = result.projectName[j]
+          str3.value = [j]
+          str.push(str3)
+        }
+        this.chart.setOption({
+          title: {
+            text: '项目分布',
+            subtext: '总数：' + result.projectCount
+          },
+          series: [{
+            name: '所有子项目分布',
+            data: str
+          }]
         })
-      })
+        console.log(str)
+      }
+      // return new Promise((resolve, reject) => {
+      //   getJiraData().then(response => {
+      //     result = response.project
+      //     for (var j = 0; j < result.projectName.length; j++) {
+      //       var str3 = {}
+      //       str3.name = result.projectName[j]
+      //       str3.value = [j]
+      //       str.push(str3)
+      //     }
+      //     this.chart.setOption({
+      //       title: {
+      //         text: '项目分布',
+      //         subtext: '总数：' + result.projectCount
+      //       },
+      //       series: [{
+      //         name: '所有子项目分布',
+      //         data: str
+      //       }]
+      //     })
+      //   }).catch(error => {
+      //     reject(error)
+      //     this.$notify.error('接口相应超时')
+      //   })
+      // })
     },
     initChart() {
       this.chart = echarts.init(this.$el, 'macarons')
 
       this.chart.setOption({
         title: {
-          text: '',
-          subtext: '所有子项目分布',
+          // text: '',
+          // subtext: '所有子项目分布',
           left: 'center',
           textStyle: {
             fontSize: 16,
@@ -114,7 +139,7 @@ export default {
         },
         series: [
           {
-            name: '访问来源',
+            // name: '访问来源',
             type: 'pie',
             radius: ['30%', '60%'],
             avoidLabelOverlap: false,
@@ -132,13 +157,13 @@ export default {
             labelLine: {
               show: false
             },
-            data: [
-              { value: 1048, name: '搜索引擎' },
-              { value: 735, name: '直接访问' },
-              { value: 580, name: '邮件营销' },
-              { value: 484, name: '联盟广告' },
-              { value: 300, name: '视频广告' }
-            ],
+            // data: [
+            //   { value: 1048, name: '搜索引擎' },
+            //   { value: 735, name: '直接访问' },
+            //   { value: 580, name: '邮件营销' },
+            //   { value: 484, name: '联盟广告' },
+            //   { value: 300, name: '视频广告' }
+            // ],
             animationDuration: animationDuration
           }
         ]

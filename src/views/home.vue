@@ -3,7 +3,7 @@
     <div class="dashboard-editor-container">
 <!--      <github-corner class="github-corner" />-->
       <!--:usernames="get_personaData"子组件给父组件传值，使用子组件panel-group-->
-      <panel-group @handleSetLineChartData="handleSetLineChartData" />
+      <panel-group :dashboardData="dashboardData" @handleSetLineChartData="handleSetLineChartData" />
 
       <!--<el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
         <line-chart :chart-data="lineChartData"/>
@@ -11,29 +11,29 @@
       <el-row :gutter="32">
         <el-col :xs="24" :sm="24" :lg="8">
           <div class="chart-wrapper">
-            <radar-chart />
+            <radar-chart :dashboardData="dashboardData"></radar-chart>
           </div>
         </el-col>
         <el-col :xs="24" :sm="24" :lg="8">
           <div class="chart-wrapper">
-            <pie-chart />
+            <pie-chart :dashboardData="dashboardData"></pie-chart>
           </div>
         </el-col>
         <el-col :xs="24" :sm="24" :lg="8">
           <div class="chart-wrapper">
-            <pie-chart-o />
+            <pie-chart-o :dashboardData="dashboardData"></pie-chart-o>
           </div>
         </el-col>
       </el-row>
       <el-row :gutter="32">
         <el-col :xs="24" :sm="24" :lg="8">
           <div class="chart-wrapper">
-            <radar-chart-p />
+            <radar-chart-p :dashboardData="dashboardData" ></radar-chart-p>
           </div>
         </el-col>
         <el-col :xs="24" :sm="24" :lg="8">
           <div class="chart-wrapper">
-            <bar-chart />
+            <bar-chart :dashboardData="dashboardData"></bar-chart>
           </div>
         </el-col>
       </el-row>
@@ -87,6 +87,7 @@ export default {
   },
   data() {
     return {
+      dashboardData: '',
       lineChartData: lineChartData.products,
       localAddress: 'http://jira.diy8.com/',
       username: '',
@@ -114,49 +115,52 @@ export default {
       window.open(this.localAddress + this.filterUrl)
     },
     get_personaData(username) {
-      return new Promise((resolve, reject) => {
-        getJiraData().then(response => {
-          if (response) {
-            const names = [].slice.call(response.product.userNames)
-            const bugUrl = [].slice.call(response.repaired.userNames)
-            this.productFilterUrl = response.product.filterUrl
-            this.repairedFilterUrl = response.repaired.filterUrl
-            this.projectFilterUrl = response.project.filterUrl
-            // for (var j = 0; j < response.product.userNames.length; j++) {
-            //   if (username !== undefined && username === response.product.userNames[j]) {
-            //     this.personalFilterUrl = response.product.taskAddress[j]
-            //     console.log(response.product.userNames[j] + '访问自己的任务地址：' + this.personalFilterUrl)
-            //     break
-            //   }
-            // }
-            for (const [res, value] of names.entries()) {
-              if (username !== undefined && username === value) {
-                this.personalFilterUrl = response.product.taskAddress[res]
-                console.log(value + '访问自己的任务地址：' + this.personalFilterUrl)
-                break
+      setTimeout(() => {
+        return new Promise((resolve, reject) => {
+          getJiraData().then(response => {
+            if (response) {
+              this.dashboardData = JSON.stringify(response)
+              const names = [].slice.call(response.product.userNames)
+              const bugUrl = [].slice.call(response.repaired.userNames)
+              this.productFilterUrl = response.product.filterUrl
+              this.repairedFilterUrl = response.repaired.filterUrl
+              this.projectFilterUrl = response.project.filterUrl
+              // for (var j = 0; j < response.product.userNames.length; j++) {
+              //   if (username !== undefined && username === response.product.userNames[j]) {
+              //     this.personalFilterUrl = response.product.taskAddress[j]
+              //     console.log(response.product.userNames[j] + '访问自己的任务地址：' + this.personalFilterUrl)
+              //     break
+              //   }
+              // }
+              for (const [res, value] of names.entries()) {
+                if (username !== undefined && username === value) {
+                  this.personalFilterUrl = response.product.taskAddress[res]
+                  console.log(value + '访问自己的任务地址：' + this.personalFilterUrl)
+                  break
+                }
+              }
+              // for (var k = 0; k < response.repaired.userNames.length; k++) {
+              //   if (username !== undefined && username === response.repaired.userNames[k]) {
+              //     this.bugFilterUrl = response.repaired.taskAddress[k]
+              //     console.log('访问自己的Bug地址：' + this.bugFilterUrl)
+              //     break
+              //   }
+              // }
+              for (const [ret, val] of bugUrl.entries()) {
+                if (username !== undefined && username === val) {
+                  this.bugFilterUrl = response.repaired.taskAddress[ret]
+                  console.log(val + '访问自己的Bug地址：' + this.bugFilterUrl)
+                  break
+                }
               }
             }
-            // for (var k = 0; k < response.repaired.userNames.length; k++) {
-            //   if (username !== undefined && username === response.repaired.userNames[k]) {
-            //     this.bugFilterUrl = response.repaired.taskAddress[k]
-            //     console.log('访问自己的Bug地址：' + this.bugFilterUrl)
-            //     break
-            //   }
-            // }
-            for (const [ret, val] of bugUrl.entries()) {
-              if (username !== undefined && username === val) {
-                this.bugFilterUrl = response.repaired.taskAddress[ret]
-                console.log(val + '访问自己的Bug地址：' + this.bugFilterUrl)
-                break
-              }
-            }
-          }
-        }).catch(error => {
-          reject(error)
-          // alert(error)
-          this.$notify.error('接口相应超时')
+          }).catch(error => {
+            reject(error)
+            // alert(error)
+            this.$notify.error('接口响应超时')
+          })
         })
-      })
+      }, 200);
     }
   }
 }
