@@ -15,7 +15,6 @@ import dict from './components/Dict'
 // 权限指令
 import checkPer from '@/utils/permission'
 import permission from './components/Permission'
-import {hasBtnPermission} from '@/utils/permission'
 import './assets/styles/element-variables.scss'
 // global css
 import './assets/styles/index.scss'
@@ -54,7 +53,6 @@ Vue.use(Element, {
 })
 
 Vue.config.productionTip = false
-Vue.prototype.hasPerm = hasBtnPermission
 
 new Vue({
   el: '#app',
