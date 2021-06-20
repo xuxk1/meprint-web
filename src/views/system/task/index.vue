@@ -30,22 +30,8 @@
         <div class="head-container">
           <div v-if="crud.props.searchToggle">
             <!-- 搜索 -->
-            <el-input
-              v-model="query.title"
-              clearable
-              size="small"
-              placeholder="输入任务名称搜索"
-              style="width: 200px;"
-              class="filter-item"
-              @keyup.enter.native="crud.toQuery" />
-            <el-input
-              v-model="query.owner"
-              clearable
-              size="small"
-              placeholder="输入负责人搜索"
-              style="width: 200px;"
-              class="filter-item"
-              @keyup.enter.native="crud.toQuery" />
+            <el-input v-model="query.title" clearable size="small" placeholder="输入任务名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+            <el-input v-model="query.owner" clearable size="small" placeholder="输入负责人搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
             <date-range-picker v-model="query.createTime" class="date-item" @change="onDateChange" />
             <rrOperation />
           </div>
@@ -243,9 +229,6 @@ import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operationXmind'
 import pagination from '@crud/Pagination'
 import DateRangePicker from '@/components/DateRangePicker'
-import Treeselect from '@riophae/vue-treeselect'
-import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
 
 const username = localStorage.getItem('username')
 const defaultForm = {
@@ -263,7 +246,7 @@ const defaultForm = {
 }
 export default {
   name: 'Task',
-  components: { Treeselect, pagination, crudOperation, rrOperation, DateRangePicker },
+  components: { pagination, crudOperation, rrOperation, DateRangePicker },
   cruds() {
     const params = {
       'userName': username
@@ -399,7 +382,11 @@ export default {
       that.formDate.prioritylist = []
       that.formDate.resource = []
       that.selectCaseCount = 0
-      that.btnStatus = (val === true) ? true : false
+      if (val === true) {
+        that.btnStatus = true
+      } else {
+        that.btnStatus = false
+      }
       this.form.chooseContent = { 'priority': [], 'resource': [] }
 
       cases.countByCondition({ caseId: caseId, priority: '', resource: '' }).then(res => {

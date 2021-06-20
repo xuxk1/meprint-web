@@ -84,7 +84,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="描述" prop="description">
-              <textarea v-model="form.description" class="ant-input" maxLength="1024" style="width: 436px"/>
+              <textarea v-model="form.description" class="ant-input" maxLength="1024" style="width: 436px" />
             </el-form-item>
             <el-form-item v-if="crud.status.add" label="上传">
               <el-input v-if="false" v-model="form.file" />
@@ -161,7 +161,6 @@ import rrOperation from '@crud/RR.operation'
 import crudOperationXmind from '@crud/CRUD.operationXmind'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
-import DateRangePicker from '@/components/DateRangePicker'
 import Treeselect from '@riophae/vue-treeselect'
 import { mapGetters } from 'vuex'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
@@ -174,7 +173,7 @@ const username = localStorage.getItem('username')
 var defaultForm = { id: null, creator: username, title: null, productLineId: 1, caseType: null, channel: 1, file: '', caseContent: initData, bizId: -1, projectId: null, enabled: 'false', project: { id: null }, description: null, requirementId: 1 }
 export default {
   name: 'Case',
-  components: { Treeselect, crudOperationXmind, rrOperation, udOperation, pagination, DateRangePicker },
+  components: { Treeselect, crudOperationXmind, rrOperation, udOperation, pagination },
   cruds() {
     const params = {
       productLineId: 1,

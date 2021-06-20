@@ -35,7 +35,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="状态" prop="enabled">
-          <el-radio v-for="item in dict.project_status" :key="item.id" v-model="form.enabled" :label="item.value" >{{ item.label }}</el-radio>
+          <el-radio v-for="item in dict.project_status" :key="item.id" v-model="form.enabled" :label="item.value">{{ item.label }}</el-radio>
         </el-form-item>
         <el-form-item v-if="form.isTop === '0'" style="margin-bottom: 0;" label="上级项目" prop="pid">
           <treeselect
@@ -110,7 +110,7 @@ export default {
   name: 'Project',
   components: { Treeselect, crudOperation, rrOperation, udOperation, DateRangePicker },
   cruds() {
-    return CRUD({ title: '项目', url: 'api/project', crudMethod: { ...crudProject }})
+    return CRUD({ title: '项目管理', url: 'api/project', crudMethod: { ...crudProject }})
   },
   mixins: [presenter(), header(), form(defaultForm), crud()],
   // 设置数据字典
