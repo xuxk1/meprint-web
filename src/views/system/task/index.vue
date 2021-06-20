@@ -37,72 +37,93 @@
               placeholder="输入任务名称搜索"
               style="width: 200px;"
               class="filter-item"
-              @keyup.enter.native="crud.toQuery"/>
+              @keyup.enter.native="crud.toQuery" />
             <el-input
               v-model="query.owner"
-              clearable size="small"
+              clearable
+              size="small"
               placeholder="输入负责人搜索"
               style="width: 200px;"
               class="filter-item"
-              @keyup.enter.native="crud.toQuery"/>
-            <date-range-picker v-model="query.createTime" class="date-item" @change="onDateChange"/>
-            <rrOperation/>
+              @keyup.enter.native="crud.toQuery" />
+            <date-range-picker v-model="query.createTime" class="date-item" @change="onDateChange" />
+            <rrOperation />
           </div>
-          <crudOperation show="" :permission="permission"/>
+          <crudOperation show="" :permission="permission" />
         </div>
         <!--表单渲染-->
-        <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0"
-                   :title="crud.status.title" append-to-body width="730px">
+        <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" append-to-body width="730px">
           <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="100px">
             <el-form-item label="任务名称" prop="title">
-              <el-input v-model="form.title" placeholder="请输入任务名称" style="width: 220px;"/>
+              <el-input v-model="form.title" placeholder="请输入任务名称" style="width: 220px;" />
             </el-form-item>
             <el-form-item label="任务负责人" prop="owner">
-              <el-input v-model="form.owner" placeholder="请输入任务负责人" style="width: 220px;"/>
+              <el-input v-model="form.owner" placeholder="请输入任务负责人" style="width: 220px;" />
             </el-form-item>
             <el-form-item label="计划周期" prop="StartTime">
-              <date-range-picker v-model="formDate.expectTime" value-format="yyyy-MM-dd" range-separator="至"
-                                 class="date-item" style="width: 556px;" @change="dateConvert"/>
+              <date-range-picker
+                v-model="formDate.expectTime"
+                value-format="yyyy-MM-dd"
+                range-separator="至"
+                class="date-item"
+                style="width: 556px;"
+                @change="dateConvert"
+              />
             </el-form-item>
             <el-form-item label="用例集分类" prop="caseId">
-              <el-select v-model="form.caseId" placeholder="请选择用例集" size="small" style="width: 220px"
-                         @change="selectCases(form.caseId)">
-                <el-option v-for="item in Cases" :key="item.value" :label="item.title" :value="item.id"/>
+              <el-select v-model="form.caseId" placeholder="请选择用例集" size="small" style="width: 220px" @change="selectCases(form.caseId)">
+                <el-option v-for="item in Cases" :key="item.value" :label="item.title" :value="item.id" />
               </el-select>
             </el-form-item>
             <el-form-item label="任务描述" prop="description">
-              <!--          <el-input v-model="form.description" style="width: 220px;" />-->
-              <textarea v-model="form.description" class="ant-input" maxLength="1024" style="width: 220px"/>
+              <textarea v-model="form.description" class="ant-input" maxLength="1024" style="width: 220px" />
             </el-form-item>
             <el-form-item label="选择用例集" prop="chooseContent">
               <el-radio-group v-model="formDate.content" :disabled="radioBtnStatus" style="width: 556px">
-                <el-radio :label="true" style="display: block; height: 50px; margin-top: 10px; font-size: 14px;"
-                          @change="caseSelect(formDate.content,form.caseId)">
+                <el-radio :label="true" style="display: block; height: 50px; margin-top: 10px; font-size: 14px;" @change="caseSelect(formDate.content,form.caseId)">
                   包含全部用例
                   <p class="small-size-font">
                     覆盖全部可用用例（共计{{ caseCount }}个），如果用例集库有新增的用例，会自动加入到本计划中
                   </p>
                 </el-radio>
-                <el-radio :label="false" style="display: block; height: 80px; margin-top: 10px; font-size: 14px;"
-                          @change="caseSelect(formDate.content,form.caseId)">
+                <el-radio :label="false" style="display: block; height: 80px; margin-top: 10px; font-size: 14px;" @change="caseSelect(formDate.content,form.caseId)">
                   手动圈选用例集
-                  <el-row :gutter="15" :disabled="btnStatus"
-                          style="display: block; height: 80px; margin-top: 10px; font-size: 14px;">
+                  <el-row :gutter="15" :disabled="btnStatus" style="display: block; height: 80px; margin-top: 10px; font-size: 14px;">
                     <el-col>
                       <el-form-item label="优先级" prop="priority">
-                        <el-select v-model="formDate.prioritylist" multiple placeholder="用例等级" :disabled="btnStatus"
-                                   style="width: 200px" @change="setPriority(formDate.prioritylist, form.caseId)">
-                          <el-option v-for="item in caseLevel" :key="item.key" :label="item.display_name"
-                                     :value="item.key"/>
+                        <el-select
+                          v-model="formDate.prioritylist"
+                          multiple
+                          placeholder="用例等级"
+                          :disabled="btnStatus"
+                          style="width: 200px"
+                          @change="setPriority(formDate.prioritylist, form.caseId)"
+                        >
+                          <el-option
+                            v-for="item in caseLevel"
+                            :key="item.key"
+                            :label="item.display_name"
+                            :value="item.key"
+                          />
                         </el-select>
                       </el-form-item>
                     </el-col>
                     <el-col>
                       <el-form-item label="标签" prop="resource">
-                        <el-select v-model="formDate.resource" multiple placeholder="标签" :disabled="btnStatus"
-                                   style="width: 200px" @change="setResource(formDate.resource, form.caseId)">
-                          <el-option v-for="item in resources" :key="item.label" :label="item.label"
-                                     :value="item.label"/>
+                        <el-select
+                          v-model="formDate.resource"
+                          multiple
+                          placeholder="标签"
+                          :disabled="btnStatus"
+                          style="width: 200px"
+                          @change="setResource(formDate.resource, form.caseId)"
+                        >
+                          <el-option
+                            v-for="item in resources"
+                            :key="item.label"
+                            :label="item.label"
+                            :value="item.label"
+                          />
                         </el-select>
                       </el-form-item>
                       <p>{{ selectCaseCount }}个已选用例</p>
@@ -118,39 +139,57 @@
           </div>
         </el-dialog>
         <!--表格渲染-->
-        <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;"
-                  @selection-change="crud.selectionChangeHandler">
-          <el-table-column :selectable="checkboxT" type="selection" width="55"/>
+        <el-table ref="table" v-loading="crud.loading" :data="crud.data" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
+          <el-table-column :selectable="checkboxT" type="selection" width="55" />
           <el-table-column v-model="form.caseId" :show-overflow-tooltip="true" prop="caseId" label="用例ID">
             <template slot-scope="scope">
               <div>{{ scope.row.caseId }}</div>
             </template>
           </el-table-column>
-          <el-table-column :show-overflow-tooltip="true" prop="id" label="任务ID"/>
-          <el-table-column :show-overflow-tooltip="true" prop="title" width="215" label="任务名称"/>
-          <el-table-column :show-overflow-tooltip="true" prop="owner" label="负责人"/>
-          <el-table-column :show-overflow-tooltip="true" prop="executors" label="执行人"/>
+          <el-table-column :show-overflow-tooltip="true" prop="id" label="任务ID" />
+          <el-table-column :show-overflow-tooltip="true" prop="title" width="215" label="任务名称" />
+          <el-table-column :show-overflow-tooltip="true" prop="owner" label="负责人" />
+          <el-table-column :show-overflow-tooltip="true" prop="executors" label="执行人" />
           <el-table-column :show-overflow-tooltip="true" prop="passRate" label="通过率">
             <template slot-scope="scope">
-                        <span style="margin-left: 10px">{{ parseFloat((scope.row.successNum/scope.row.totalNum)*100).toFixed(2) }}%</span>
-                     
+              <span style="margin-left: 10px">{{ parseFloat((scope.row.successNum/scope.row.totalNum)*100).toFixed(2) }}%</span>
             </template>
           </el-table-column>
           <el-table-column :show-overflow-tooltip="true" prop="executeNum" label="已测用例集">
             <template slot-scope="scope">
-                        <span style="margin-left: 10px">{{scope.row.executeNum}}/{{scope.row.totalNum}}</span>
-                     
+              <span style="margin-left: 10px">{{ scope.row.executeNum }}/{{ scope.row.totalNum }}</span>
             </template>
           </el-table-column>
-          <el-table-column :show-overflow-tooltip="true" prop="expectStartTime" width="136px" value-format="YYYY-MM-DD"
-                           label="开始时间"/>
-          <el-table-column :show-overflow-tooltip="true" prop="expectEndTime" width="136px" value-format="YYYY-MM-DD"
-                           label="结束时间"/>
-          <el-table-column v-if="checkPer(['admin','task:edit','task:run','task:del'])" label="操作" width="170px"
-                           align="center" fixed="right">
+          <el-table-column
+            :show-overflow-tooltip="true"
+            prop="expectStartTime"
+            width="136px"
+            value-format="YYYY-MM-DD"
+            label="开始时间"
+          />
+          <el-table-column
+            :show-overflow-tooltip="true"
+            prop="expectEndTime"
+            width="136px"
+            value-format="YYYY-MM-DD"
+            label="结束时间"
+          />
+          <el-table-column
+            v-if="checkPer(['admin','task:edit','task:run','task:del'])"
+            label="操作"
+            width="170px"
+            align="center"
+            fixed="right"
+          >
             <template slot-scope="scope">
-              <el-button v-permission="['admin','task:edit']" size="mini" style="margin-right: 3px;" type="text"
-                         @click="crud.toEdit(scope.row)">编辑
+              <el-button
+                v-permission="['admin','task:edit']"
+                size="mini"
+                style="margin-right: 3px;"
+                type="text"
+                @click="crud.toEdit(scope.row)"
+              >
+                编辑
               </el-button>
               <el-popover
                 :ref="`popover-${scope.$index}`"
@@ -161,8 +200,13 @@
                 <p>确定执行该任务吗？</p>
                 <div style="text-align: right; margin: 0">
                   <el-button size="mini" type="text" @click="$refs[`popover-${scope.$index}`].doClose()">取消</el-button>
-                  <el-button :loading="editLoading" type="primary" size="mini"
-                             @click="execute(scope.row.caseId, scope.row.id)">确定
+                  <el-button
+                    :loading="editLoading"
+                    type="primary"
+                    size="mini"
+                    @click="execute(scope.row.caseId, scope.row.id)"
+                  >
+                    确定
                   </el-button>
                 </div>
                 <el-button slot="reference" type="text" size="mini">执行</el-button>
@@ -185,7 +229,7 @@
           </el-table-column>
         </el-table>
         <!--分页组件-->
-        <pagination/>
+        <pagination />
       </el-col>
     </el-row>
   </div>
@@ -355,7 +399,7 @@ export default {
       that.formDate.prioritylist = []
       that.formDate.resource = []
       that.selectCaseCount = 0
-      that.btnStatus=(val===true) ? true : false
+      that.btnStatus = (val === true) ? true : false
       this.form.chooseContent = { 'priority': [], 'resource': [] }
 
       cases.countByCondition({ caseId: caseId, priority: '', resource: '' }).then(res => {
