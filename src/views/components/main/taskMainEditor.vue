@@ -57,7 +57,7 @@ export default {
     this.wsUrl = wsUri + '/api/case/' + this.caseId + '/' + this.taskId + '/' + this.iscore + '/' + username + '/' + getToken()
     this.ws = (window.ws = new WebSocket(this.wsUrl))
     this.initWebsocket(this.ws)
-    window.addEventListener('beforeunload', e => this.onclose(e))
+    // window.addEventListener('beforeunload', e => this.onclose(e))
     this.$router.afterEach(() => this.ws.close())
   },
   destroyed () {
@@ -194,13 +194,14 @@ export default {
       }
       editor.minder.on('contentchange', () => {
         const patch = window.diff(editor.minder.exportJson(),data)
+        console.log(patch)
         editXmindData = JSON.stringify(editor.minder.exportJson())
         contentchange = JSON.parse(editXmindData)
         contentchange.base = 0
         resultData = contentchange
         const messageJson = {
           'case': resultData,
-          'patch': [patch[0]]
+          'patch': [[patch[0]]]
         }
         const message = JSON.stringify(messageJson).replace(/\\/g, '')
         console.log('message====' + message)

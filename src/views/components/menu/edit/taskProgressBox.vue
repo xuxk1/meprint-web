@@ -23,10 +23,10 @@
       return {
         items: [
           { value: null, type: 'clean', title: '移除结果' },
-          { value: '1', type: 'back', title: '不执行' },
-          { value: '9', type: 'pass', title: '通过' },
+          { value: '1', type: 'fail', title: '失败' },
+          { value: '4', type: 'back', title: '不执行' },
           { value: '5', type: 'block', title: '阻塞' },
-          { value: '4', type: 'fail', title: '失败' }
+          { value: '9', type: 'pass', title: '通过' }
         ]
       }
     },
@@ -46,7 +46,6 @@
         )
       }
     },
-    created() {},
     methods: {
       execCommand(index) {
         // minder.execCommand('Image', '', '移除图片');

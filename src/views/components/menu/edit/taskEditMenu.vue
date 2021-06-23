@@ -25,10 +25,10 @@
     <switchLock v-model="value" text="on|off" @change="sendMessage"></switchLock>
   </div>
   <div class='menu-button' v-if="checkPer(['admin','case:update'])">
-    <el-button v-permission="['admin','case:update']" type="primary" @click="save" size="medium">保存</el-button>
+    <el-button v-permission="['admin','case:update']" type="primary" size="medium" @click="save" >保存</el-button>
   </div>
   <div class='menu-button'>
-    <el-button type="primary" @click="$router.back()" size="medium">返回上一页</el-button>
+    <el-button type="primary" size="medium" @click="$router.back()">返回上一页</el-button>
   </div>
 </div>
 </template>
