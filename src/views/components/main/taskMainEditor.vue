@@ -186,15 +186,44 @@ export default {
       const editor = (window.taskeditor = new Editor(el))
       var editXmindData = ''
       let contentchange = ''
+      var  oldData = ''
+      var  selectValue =''
       const messageType = 1
       if (data) {
         editor.minder.importJson(data)
       }else {
         return this.setEditor(editor.minder)
       }
+      editor.minder.on('selectionchange', (e) => {
+        const status = minder.queryCommandState('progress')
+        selectValue = minder.queryCommandValue('progress')
+        console.log(status + '\n' + selectValue)
+      })
+      oldData = editor.minder.exportJson()
       editor.minder.on('contentchange', () => {
-        const patch = window.diff(editor.minder.exportJson(),data)
-        console.log(patch)
+        const newData = editor.minder.exportJson()
+        const value = minder.queryCommandValue('progress')
+        const patch = window.diff(newData,oldData)
+        let op = ''
+        console.log('value=========' + value)
+        if (value === null) {
+          op = 'remove'
+          patch[0].op = op
+        } else if (value !==null && selectValue !==null){
+          op = 'replace'
+          patch[0].op = op
+        } else if (value !==null && selectValue === null) {
+          op = 'add'
+          patch[0].op = op
+        } else if (value !==null && (value === '1' || value === '4' || value === '5' || value === '9')) {
+          op = 'replace'
+          patch[0].op = op
+        } else if (value === null && (value === '1' || value === '4' || value === '5' || value === '9')) {
+          op = 'add'
+          patch[0].op = op
+        }
+        patch[0].value = value
+        console.log(patch[0])
         editXmindData = JSON.stringify(editor.minder.exportJson())
         contentchange = JSON.parse(editXmindData)
         contentchange.base = 0

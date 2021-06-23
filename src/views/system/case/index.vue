@@ -404,7 +404,6 @@ export default {
     },
     getCaseInfo(id) {
       cases.getCaseInfo(id).then(res => {
-        console.log('res=====' + res)
       })
       this.$router.push({ path: '/system/case/xmind', query: { caseId: id }})
     }
