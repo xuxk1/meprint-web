@@ -28,7 +28,7 @@ export function edit(data) {
 export function clear(data) {
   return request({
     url: 'api/record/clear',
-    method: 'get',
+    method: 'post',
     data
   })
 }
