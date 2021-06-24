@@ -199,7 +199,7 @@ export default {
         selectValue = minder.queryCommandValue('progress')
         console.log(status + '\n' + selectValue)
       })
-      oldData = editor.minder.exportJson()
+      oldData = resultData = editor.minder.exportJson()
       editor.minder.on('contentchange', () => {
         const newData = editor.minder.exportJson()
         const value = minder.queryCommandValue('progress')
