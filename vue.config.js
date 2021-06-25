@@ -7,7 +7,7 @@ function resolve(dir) {
 }
 
 const name = defaultSettings.title // 网址标题
-const port = 9013 // 端口配置
+const port = 9016 // 端口配置
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
@@ -20,6 +20,8 @@ module.exports = {
   productionSourceMap: false,
   devServer: {
     port: port,
+    hot: true,
+    disableHostCheck: true,
     open: true,
     overlay: {
       warnings: false,
@@ -43,7 +45,6 @@ module.exports = {
     },
     historyApiFallback: true,
     watchOptions: { aggregateTimeout: 300, poll: 1000 },
-    disableHostCheck: true,
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
