@@ -5,7 +5,8 @@ import Layout from '../layout/index'
 Vue.use(Router)
 
 export const constantRouterMap = [
-  { path: '/login',
+  {
+    path: '/login',
     meta: { title: '登录', noCache: true },
     component: (resolve) => require(['@/views/login'], resolve),
     hidden: true
@@ -69,6 +70,32 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/chart',
+    component: Layout,
+    redirect: '/chart',
+    children: [
+      {
+        path: 'chart',
+        component: (resolve) => require(['@/views/chart/chart'], resolve),
+        name: 'Chart',
+        meta: { title: '质量大盘' }
+      }
+    ]
+  },
+  {
+    path: '/Echarts',
+    component: Layout,
+    redirect: '/Echarts',
+    children: [
+      {
+        path: 'Echarts',
+        component: (resolve) => require(['@/views/components/Echarts'], resolve),
+        name: 'Echarts',
+        meta: { title: 'Echarts' }
+      }
+    ]
+  },
+  {
     path: '/user',
     component: Layout,
     hidden: true,
@@ -82,6 +109,7 @@ export const constantRouterMap = [
       }
     ]
   }
+
 ]
 
 export default new Router({
