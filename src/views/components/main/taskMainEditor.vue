@@ -156,28 +156,29 @@ export default {
       }else {
         this.naotu()
       }
-      //收到服务器信息，心跳重置
+      // 收到服务器信息，心跳重置
       this.reset()
     },
     onclose(e) {
-      console.log("连接关闭")
+      console.log('连接关闭')
       console.log('websocket 断开: ' + e.code + ' ' + e.reason + ' ' + e.wasClean)
-      e = e || window.event;
+      e = e || window.event
       if (e) {
-        e.returnValue = "您是否确认离开此页面-您输入的数据可能不会被保存"
+        e.returnValue = '您是否确认离开此页面-您输入的数据可能不会被保存'
         this.ws.close()
       }
       return e.returnValue
-      //重连
+      // 重连
       // this.reconnect()
     },
     onerror(e) {
-      console.log("出现错误:" + e.error)
-      //重连
+      console.log('出现错误:' + e.error)
+      // 重连
       this.reconnect()
     },
-    onsend(msg) {//向服务器发送信息
-      //数据发送
+    // 向服务器发送信息
+    onsend(msg) {
+      // 数据发送
       this.ws.send(msg)
     },
     naotu(ws, data) {
@@ -186,12 +187,12 @@ export default {
       const editor = (window.taskeditor = new Editor(el))
       var editXmindData = ''
       let contentchange = ''
-      var  oldData = ''
-      var  selectValue =''
+      var oldData = ''
+      var selectValue = ''
       const messageType = 1
       if (data) {
         editor.minder.importJson(data)
-      }else {
+      } else {
         return this.setEditor(editor.minder)
       }
       editor.minder.on('selectionchange', (e) => {
@@ -203,19 +204,19 @@ export default {
       editor.minder.on('contentchange', () => {
         const newData = editor.minder.exportJson()
         const value = minder.queryCommandValue('progress')
-        const patch = window.diff(newData,oldData)
+        const patch = window.diff(newData, oldData)
         let op = ''
         console.log('value=========' + value)
         if (value === null) {
           op = 'remove'
           patch[0].op = op
-        } else if (value !==null && selectValue !==null){
+        } else if (value !== null && selectValue !== null) {
           op = 'replace'
           patch[0].op = op
-        } else if (value !==null && selectValue === null) {
+        } else if (value !== null && selectValue === null) {
           op = 'add'
           patch[0].op = op
-        } else if (value !==null && (value === '1' || value === '4' || value === '5' || value === '9')) {
+        } else if (value !== null && (value === '1' || value === '4' || value === '5' || value === '9')) {
           op = 'replace'
           patch[0].op = op
         } else if (value === null && (value === '1' || value === '4' || value === '5' || value === '9')) {
