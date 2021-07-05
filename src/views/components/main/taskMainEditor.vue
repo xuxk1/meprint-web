@@ -57,7 +57,7 @@ export default {
     this.wsUrl = wsUri + '/api/case/' + this.caseId + '/' + this.taskId + '/' + this.iscore + '/' + username + '/' + getToken()
     this.ws = (window.ws = new WebSocket(this.wsUrl))
     this.initWebsocket(this.ws)
-    // window.addEventListener('beforeunload', e => this.onclose(e))
+    window.addEventListener('beforeunload', e => this.onclose(e))
     this.$router.afterEach(() => this.ws.close())
   },
   destroyed () {
