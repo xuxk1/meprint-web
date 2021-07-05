@@ -241,9 +241,9 @@ export default {
     },
     savesave() {
       const params = {
-        id: this.caseId.toString(),
+        id: String(this.caseId),
         title: this.title,
-        recordId: this.taskId.toString(),
+        recordId: String(this.taskId),
         modifier: username,
         caseContent: resultData
       }
